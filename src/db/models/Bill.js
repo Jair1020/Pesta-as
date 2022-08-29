@@ -10,13 +10,13 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      order_date: {
+      bill_date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
       status: {
         type: DataTypes.ENUM("aprobada", "proceso", "pendiente", "rechazada"),
-        allowNull: false,
+        defaultValue:'proceso'
       },
       observations: {
         type: DataTypes.TEXT,

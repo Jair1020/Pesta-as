@@ -1,20 +1,61 @@
 import React from "react";
 import S from "./factura.module.css";
+import search from "../../assets/Img/search.png";
+import { Toast } from "../features.js/Toast";
+const ipcRenderer = window.ipcRenderer;
 
-export default function DataClient() {
+export default function DataClient({ client, setClient, saveBill }) {
+  const onHandlerChange = (e) => {
+    setClient({ ...client, [e.target.name]: e.target.value });
+  };
+  const onHandlerClick = async ()=>{
+    let clientFound = await ipcRenderer.invoke ('GET_ONE_CLIENT', client.id )
+    clientFound?setClient(clientFound):Toast.fire ({
+      icon:'info',
+      title:'No se encontro cliente'
+    })
+  }
+
   return (
     <div className={S.contClient}>
-      <div className={S.leftClient} >
+      <div className={S.leftClient}>
         <label>Cliente:</label>
-        <input type="text" />
+        <input
+          disabled={saveBill}
+          type="text"
+          value={client.name_client ? client.name_client : ""}
+          onChange={onHandlerChange}
+          name="name_client"
+        />
         <label>Email:</label>
-        <input type="mail" />
+        <input
+          disabled={saveBill}
+          type="email"
+          value={client.email ? client.email : ""}
+          onChange={onHandlerChange}
+          name="email"
+        />
       </div>
-      <div className={S.rightClient} >
+      <div className={S.rightClient}>
         <label>Documento:</label>
-        <input type="number" />
+        <div style={{display: "flex", flexDirection:'row'}}>
+          <input
+            disabled={saveBill}
+            type="number"
+            value={client.id ? client.id : ""}
+            onChange={onHandlerChange}
+            name="id"
+          />
+          <img style={saveBill?{display:'none'}:{cursor:'pointer'}} onClick={!saveBill?onHandlerClick:()=>{}} className={S.search} src={search} alt="" />
+        </div>
         <label>Telefono:</label>
-        <input type="number" />
+        <input
+          disabled={saveBill}
+          type="number"
+          value={client.phone ? client.phone : ""}
+          onChange={onHandlerChange}
+          name="phone"
+        />
       </div>
     </div>
   );

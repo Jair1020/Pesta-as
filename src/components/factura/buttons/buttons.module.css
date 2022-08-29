@@ -1,0 +1,13 @@
+.ButtonCreate{
+  display: flex;
+  align-items: center;
+  gap:10px;
+  height: 40px ;
+  background-color: #ef4a4b;
+  border: none;
+  border-radius: 10px;
+  padding-inline: 15px;
+  font-size: medium;
+  font-weight: bold;
+  cursor: pointer;
+}
