@@ -12,6 +12,9 @@ module.exports = (sequelize) => {
       },
       price:{
         type: DataTypes.INTEGER,
+      },
+      num_order:{
+        type:DataTypes.INTEGER,
       }
     },
     {

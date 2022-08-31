@@ -10,10 +10,12 @@ export default function DataClient({ client, setClient, saveBill }) {
   };
   const onHandlerClick = async ()=>{
     let clientFound = await ipcRenderer.invoke ('GET_ONE_CLIENT', client.id )
+    console.log (clientFound)
     clientFound?setClient(clientFound):Toast.fire ({
       icon:'info',
       title:'No se encontro cliente'
     })
+    
   }
 
   return (

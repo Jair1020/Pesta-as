@@ -1,12 +1,26 @@
 import React from "react";
+import { Toast } from "../features.js/Toast";
 import S from "./factura.module.css";
-export default function Dropdown({idx, options,onHandlerOption, services }) {
+export default function Dropdown({idx, options,onHandlerOption, services, billProcess, justServices ,traerBillsProcess }) {
   const [show, setShow] = React.useState(false);
+  const onHandlerButton = ()=>{
+    if (billProcess){
+      traerBillsProcess ()
+    }
+    if (billProcess && !options.length){
+      return Toast.fire({
+        icon: "warning",
+        title: "No hay facturas en proceso",
+      });
+    }else {
+      setShow(!show)
+    }
+  }
   return (
     <div className={S.contDrop}>
       <div>
         <button
-          onClick={() => setShow(!show)}
+          onClick={onHandlerButton}
           type="button"
           className={S.DropdownButton}
           id="menu-button"
@@ -37,13 +51,13 @@ export default function Dropdown({idx, options,onHandlerOption, services }) {
           onMouseLeave={(e) => setShow(!show)}
         >
           <div>
-             {services?<p style={{fontWeight:'bold', cursor:'default', fontSize:'medium' , backgroundColor:'#f7b6b6' }} >Servicios</p>:null}
+             {services && (justServices==='services' || justServices==='both')  ?<p style={{fontWeight:'bold', cursor:'default', fontSize:'medium' , backgroundColor:'#f7b6b6' }} >Servicios</p>:null}
             {options.map((e) => (
             e.service?<p onClick={onHandlerOption} key={e.id} id={e.id} num_orden={idx} servicio={'true'} >{e.name}</p>:null
             ))}
-            {services?<p style={{fontWeight:'bold', cursor:'default', fontSize:'larger' , backgroundColor:'#f7b6b6'}}>Productos</p>:null}
+            {services&&(justServices==='products'|| justServices==='both')?<p style={{fontWeight:'bold', cursor:'default', fontSize:'larger' , backgroundColor:'#f7b6b6'}}>Productos</p>:null}
             {options.map((e) => (
-            !e.service?<p onClick={onHandlerOption} key={e.id} id={e.id} num_orden={idx} servicio={'false'} >{e.name}</p>:null
+            !e.service?<p onClick={onHandlerOption} key={e.id?e.id:0} id={e.id} num_orden={idx} servicio={'false'} >{e.name?e.name:'Nueva factura'}</p>:null
             ))}
           </div>
         </div>

@@ -23,6 +23,8 @@ export default function Count({ bill, setBill, services, saveBill }) {
     let number = parseInt(e.target.value.replace(/[.]/g, ""));
     if (number < 0 || isNaN(number)) {
       number = 0;
+    }else if (number>100000000){
+      number=0
     }
     setBill((b) => ({ ...b, [e.target.name]: number }));
 
@@ -38,7 +40,11 @@ export default function Count({ bill, setBill, services, saveBill }) {
   };
 
   const onHandlerObs = (e) => {
-    setBill((b) => ({ ...b, observations: e.target.value }));
+    let obs= e.target.value
+    if (obs.length>1000){
+      obs= obs.slice (0,1000)
+    }
+    setBill((b) => ({ ...b, observations: obs }));
   };
 
   return (

@@ -3,10 +3,27 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const { getServices } = require('../src/db/requests/Services');
 const { getStylists } = require('../src/db/requests/Stylist');
 const { createClient, getOneClient } = require('../src/db/requests/Client');
-const { createBill } = require('../src/db/requests/Bill');
+const { createBill, getBillsProcess, updateBill } = require('../src/db/requests/Bill');
 const { getProducts } = require('../src/db/requests/Products');
+const { createServiceDone } = require('../src/db/requests/ServiceDone');
+const { conn } = require('../src/db/db.js');
+const {
+  loadServices,
+  loadProducts,
+  loadCategories, 
+  loadStylist} = require('../src/db/datamockDb.js')
 
 
+conn.sync({ force: true }).then(async () => {
+  try {
+    // await loadCategories();
+    // await loadProducts();
+    // await loadServices();
+    // await loadStylist();
+  } catch (err) {
+    console.log(err)
+  }
+})
 
 
 function createWindow() {
@@ -65,7 +82,23 @@ ipcMain.handle ('GET_ONE_CLIENT', async (event, arg) =>{
   return client
 })
 
+ipcMain.handle ('GET_BILLS_PROCESS', async (event, arg)=>{
+  let billsProcess = await getBillsProcess()
+  return billsProcess
+})
 
+ipcMain.handle ('SAVE_BILL', async (event, arg)=>{
+  try{
+    let servicesDone = await createServiceDone  (arg.services)
+    let updateBilll = await updateBill (arg.bill)
+    return servicesDone?servicesDone:[] 
+  }catch (err){
+    console.log (err)
+    return err
+  }
+  
+
+})
 
 
 

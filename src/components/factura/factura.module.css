@@ -1,6 +1,7 @@
 /* -------MainCont------------- */
 .maincont {
   display: flex;
+  flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
   gap:15px;
@@ -10,12 +11,24 @@
 
 .cont {
   /* margin-block: 5%; */
+  display: block;
   padding: 3%;
   box-shadow: 0 1px 6px 2px rgba(0, 0, 0, 0.3);
   border-radius: 15px;
   max-width: 1000px;
   min-width: 700px;
 }
+
+.dropBillProcess{
+  position: absolute;
+  margin-top: -1%;
+  margin-left: -1.3% ;
+}
+.contButtons{
+  display: flex;
+  gap: 10px;
+}
+
 
 /* -------HeaderFact------------- */
 .header {
@@ -48,12 +61,10 @@
 .nit {
   font-weight: bold;
   min-width: 40px;
-  /* margin-inline: 30px; */
 }
 
 .recibo {
   font-weight: bold;
-  /* margin-inline: 30px; */
   color: #ef4a4b;
 }
 
@@ -233,6 +244,7 @@
 
 
 .rows {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -241,6 +253,21 @@
   font-size: small;
   background-color:#f9c8c8;
 }
+
+.x{
+  position:absolute;
+  background-color: transparent;
+  border: none;
+  width: fit-content;
+  cursor: pointer;
+  right: -20px;
+}
+
+.x img{
+  width: 10px;
+  pointer-events: none
+}
+
 
 .DescColumn {
   width: 200px;

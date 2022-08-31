@@ -11,3 +11,7 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+.ButtonCreate img {
+  height: 30px;
+}

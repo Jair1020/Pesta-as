@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import S from "../factura.module.css";
 import Dropdown from "../Dropdown";
+import x from '../../../assets/Img/x.svg'
 const ipcRenderer = window.ipcRenderer;
 
 export default function Row({ services, setServices, saveBill }) {
@@ -77,13 +78,13 @@ export default function Row({ services, setServices, saveBill }) {
     let service;
     if (e.target.name === "amount") {
       let cant =
-        parseInt(numero) <= 0 || isNaN(parseInt(numero)) ? 1 : parseInt(numero);
+        parseInt(numero) <= 0 || isNaN(parseInt(numero)) ? 1 : parseInt(numero)>100?100:  parseInt(numero);
       service = {
         amount: cant,
         num_order: e.target.id,
       };
     } else if (e.target.name === "sale") {
-      let sale = parseInt(numero) < 0 || numero === "" ? 0 : parseInt(numero);
+      let sale = parseInt(numero) < 0 || numero === "" ? 0 : parseInt(numero)>services[e.target.id].price*services[e.target.id].amount?services[e.target.id].price*services[e.target.id].amount:     parseInt(numero);
       service = {
         sale: sale,
         num_order: e.target.id,
@@ -105,6 +106,12 @@ export default function Row({ services, setServices, saveBill }) {
     servicess[service.num_order] = newService;
     setServices((services) => servicess);
   };
+  const onHandlerDelete = (e)=>{
+    let newServices = [...services].filter ((ser,idx)=>{
+     return parseInt (e.target.id) !== idx
+    })
+    setServices (newServices)
+  }
 
   return services.map((e, idx) => (
     <div
@@ -112,19 +119,23 @@ export default function Row({ services, setServices, saveBill }) {
       style={idx % 2 === 0 ? { backgroundColor: "#fbdada" } : {}}
       className={S.rows}
     >
+      {!e.saved && e.id ? <button id={idx} onClick={onHandlerDelete} className={S.x} >
+        <img src={x} alt="" />
+      </button>:null}
       <div className={S.contDesc}>
         {saveBill ? (
           <Dropdown
             idx={idx}
-            options={servicios}
+            options={e.saved?servicios.filter(ser=> ser.service=== e.service ):servicios}
             onHandlerOption={onHandlerService}
             services={true}
+            justServices= {e.saved?e.service?'services':'products':'both'}
           />
         ) : null}
         <span>{e.name || ""}</span>
       </div>
       <input
-        disabled={!saveBill}
+        disabled={!saveBill || !e.id}
         className={S.cantColumn}
         type="number"
         value={e.amount ? e.amount : ""}
@@ -133,7 +144,7 @@ export default function Row({ services, setServices, saveBill }) {
         name="amount"
       />
       <div className={S.contEst}>
-        {saveBill ? (
+        {saveBill && e.service ? (
           <Dropdown
             idx={idx}
             options={stylists}
@@ -146,7 +157,7 @@ export default function Row({ services, setServices, saveBill }) {
         {e.price ? "$ " + new Intl.NumberFormat("de-DE").format(e.price) : ""}
       </span>
       <input
-        disabled={!saveBill}
+        disabled={!saveBill || !e.id}
         className={S.descuento}
         value={
           typeof e.sale === "number"
@@ -158,7 +169,7 @@ export default function Row({ services, setServices, saveBill }) {
         name="sale"
       />
       <span className={S.totalRow}>
-        {e.price_Total
+        {e.price_Total || e.price_Total===0
           ? "$ " + new Intl.NumberFormat("de-DE").format(e.price_Total)
           : ""}
       </span>
