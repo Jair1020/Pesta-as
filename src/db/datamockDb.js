@@ -129,7 +129,21 @@ const loadStylist = async ()=>{
 }
 
 
+const verifyDb = async () => {
+  try {
+    const verifyData= await Category.findAll()
+
+    return verifyData
+
+  }catch (err){
+    console.log (err)
+    throw new Error (err)
+  }
+}
+
+
 module.exports= {
+  verifyDb,
   loadCategories,
   loadServices,
   loadProducts,

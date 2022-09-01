@@ -4,10 +4,10 @@ const path = require("path");
 
 
 const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: path.join(__dirname, "dbpestañas.db"),
-  logging:false,
-  query:{raw:true}
+  dialect:'sqlite',
+  storage: 'path/to/database.sqlite',
+  logging: false,
+  query: { raw: true }
 });
 
 const basename = path.basename(__filename);

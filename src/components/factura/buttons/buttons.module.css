@@ -15,3 +15,16 @@
 .ButtonCreate img {
   height: 30px;
 }
+
+.deleteBill {
+  position:relative;
+  left: 98%;
+  bottom:10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  
+}
+.deleteBill img {
+  height: 10px;
+}

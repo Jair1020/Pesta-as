@@ -1,18 +1,16 @@
 {
-  "name": "app",
+  "name": "pestanas",
   "version": "0.1.0",
+  "description": "Control de facturas",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
   "dependencies": {
-    "@craco/craco": "^6.4.5",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "better-sqlite3-with-prebuilds": "^7.4.3",
     "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
-    "electron": "^20.0.3",
+    "electron-is-dev": "^2.0.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
@@ -20,16 +18,61 @@
     "sequelize": "^6.21.4",
     "sqlite3": "^5.0.11",
     "sweetalert2": "^11.4.29",
-    "wait-on": "^6.0.1",
-    "web-vitals": "^2.1.4"
+    "wait-on": "^6.0.1"
   },
   "scripts": {
+    "postinstall": "install-app-deps",
+    "pack": "build --dir",
+    "dist": "build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\""
+    "electron:serve": "concurrently",
+    "electron:build": "npm run build && electron-builder -c.extraMetadata.main=build/electron.js",
+    "dev": "concurrently -k \"cross-env BROWSER=none  npm start\" \"wait-on http://localhost:3000 && electron .\""
   },
+  "build": {
+    "extends": null,
+    "appId": "1010215141",
+    "asar": true,
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    },
+    "files": [
+      "dist/**/*",
+      "build/**/*",
+      "node_modules/**/*",
+      "src/db/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "license": "MIT",
+  "author": "Jair Avila <jair_p1020@hotmail.com>",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -47,5 +90,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "electron": "^20.0.3",
+    "electron-builder": "^23.3.3"
   }
 }

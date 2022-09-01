@@ -3,7 +3,13 @@ import S from "../factura.module.css";
 import bancolombia from "../../../assets/Img/bancolombia.png";
 import davivienda from "../../../assets/Img/davivienda.jpg";
 
-export default function Count({ bill, setBill, services, saveBill }) {
+export default function Count({
+  bill,
+  setBill,
+  services,
+  saveBill,
+  screenShot,
+}) {
   useEffect(() => {
     let t = services.reduce((acc, e) => {
       acc = acc + (e.price_Total ? e.price_Total : 0);
@@ -23,8 +29,8 @@ export default function Count({ bill, setBill, services, saveBill }) {
     let number = parseInt(e.target.value.replace(/[.]/g, ""));
     if (number < 0 || isNaN(number)) {
       number = 0;
-    }else if (number>100000000){
-      number=0
+    } else if (number > 100000000) {
+      number = 0;
     }
     setBill((b) => ({ ...b, [e.target.name]: number }));
 
@@ -40,9 +46,9 @@ export default function Count({ bill, setBill, services, saveBill }) {
   };
 
   const onHandlerObs = (e) => {
-    let obs= e.target.value
-    if (obs.length>1000){
-      obs= obs.slice (0,1000)
+    let obs = e.target.value;
+    if (obs.length > 1000) {
+      obs = obs.slice(0, 1000);
     }
     setBill((b) => ({ ...b, observations: obs }));
   };
@@ -85,6 +91,7 @@ export default function Count({ bill, setBill, services, saveBill }) {
             )}
           </span>
           <input
+            style={screenShot ? { height: "20px" } : {}}
             disabled={!saveBill}
             name="catch"
             value={
@@ -93,6 +100,7 @@ export default function Count({ bill, setBill, services, saveBill }) {
             onChange={onHandlerChange}
           />
           <input
+            style={screenShot ? { height: "20px" } : {}}
             disabled={!saveBill}
             name="transferBanc"
             value={
@@ -103,6 +111,7 @@ export default function Count({ bill, setBill, services, saveBill }) {
             onChange={onHandlerChange}
           />
           <input
+            style={screenShot ? { height: "20px" } : {}}
             disabled={!saveBill}
             name="transferDav"
             value={
@@ -113,6 +122,7 @@ export default function Count({ bill, setBill, services, saveBill }) {
             onChange={onHandlerChange}
           />
           <input
+            style={screenShot ? { height: "20px" } : {}}
             disabled={!saveBill}
             name="card"
             value={

@@ -12,6 +12,8 @@ import Dropdown from "./Dropdown";
 import ButtonSave from "./buttons/ButtonSave";
 import ButtonBilling from "./buttons/ButtonBilling";
 import Swal from "sweetalert2";
+import { screenshot } from "../../helpers/screenshot";
+import ButtonDeleteBill from "./buttons/ButtonDeleteBill";
 const ipcRenderer = window.ipcRenderer;
 
 export default function Factura() {
@@ -21,11 +23,13 @@ export default function Factura() {
   const [bill, setBill] = useState({});
   const [saveBill, setSaveBill] = useState(bill.id ? true : false);
   const [billUpdated, setBillUpdated] = useState(true);
+  const [screenShot, setScreenShot] = useState(false);
 
   let traerBillsProcess = async () => {
     let billsProcess = await ipcRenderer.invoke("GET_BILLS_PROCESS");
     let newBill = { client: {}, bill: {}, service: [{}, {}, {}, {}] };
-    setBillProcess([newBill, ...billsProcess]);
+    setBillProcess((b) => [newBill, ...billsProcess]);
+    console.log(billsProcess);
   };
 
   useEffect(() => {
@@ -67,10 +71,10 @@ export default function Factura() {
       setSaveBill(true);
       setTimeout(() => {
         setBillUpdated(true);
-      }, 500);
+      }, 400);
     }
   };
-  const billSave = async ({ status }) => {
+  const billSave = async ({ status, obs }) => {
     let flag = services.reduce((acc, e) => {
       if (e.service && !e.id_stylist) {
         acc = acc + 1;
@@ -83,6 +87,7 @@ export default function Factura() {
         title: "Selecciona la estilista para los servicios",
       });
     }
+
     let info = {
       services: { services, id_bill: bill.id },
       bill: {
@@ -93,7 +98,7 @@ export default function Factura() {
         card: bill.card,
         total_price: bill.total_price,
         debt: bill.debt,
-        observations: bill.observations,
+        observations: obs ? obs : bill.observations,
       },
     };
     if (status) {
@@ -115,7 +120,7 @@ export default function Factura() {
       traerBillsProcess();
       setTimeout(() => {
         setBillUpdated(true);
-      }, 500);
+      }, 400);
       Toast.fire({
         icon: "success",
         title: "Guardado",
@@ -145,7 +150,7 @@ export default function Factura() {
       }
       setTimeout(() => {
         setBillUpdated(true);
-      }, 500);
+      }, 400);
       console.log(services);
     } else {
       Toast.fire({
@@ -179,26 +184,31 @@ export default function Factura() {
         if (result.isConfirmed) {
           const { value: text } = await Swal.fire({
             input: "textarea",
-            inputLabel: "Porfavor Especifica la razón y el plazo de pago, ",
+            inputLabel: "Porfavor Especifica la razón y el plazo de pago:",
             inputPlaceholder: "Comentarios...",
             inputAttributes: {
-              "aria-label": "Porfavor Especifica la razón y el plazo de pago. ",
+              "aria-label": "Porfavor Especifique la razón y el plazo de pago:",
             },
-            color:'red',
+            color: "Black",
             showCancelButton: true,
           });
+          let obs = "";
           if (text) {
-            let obs = bill.observations;
-            obs = `${bill.observations}\n \n ${text}`;
-            setBill((b) => ({ ...b, observations: obs }));
+            obs =bill.observations?`${bill.observations}\n \n ${text}`:text;
           }
-          await billSave({ status: "pendiente" });
+          await billSave({ status: "pendiente", obs: obs });
           Swal.fire(
             "Pendiente!",
             "La factura queda en estado pendiente.",
             "success"
           );
-          onHandlerBillProcess({ target: { id: "" } });
+          setScreenShot((e) => !e);
+      setTimeout(() => {
+        let name= `${bill.id}-${new Date(Date.now()).toLocaleDateString()}`
+        screenshot(name);
+        onHandlerBillProcess({ target: { id: "" } });
+        setScreenShot((e) => !e);
+      }, 300);
         }
       });
     } else {
@@ -209,12 +219,47 @@ export default function Factura() {
         showConfirmButton: false,
         timer: 1500,
       });
+      await billSave({ status: "aprobada" });
+      setScreenShot((e) => !e);
+      setTimeout(() => {
+        let name= `${bill.id}-${new Date(Date.now()).toLocaleDateString()}`
+        screenshot(name);
+        onHandlerBillProcess({ target: { id: "" } });
+        setScreenShot((e) => !e);
+      }, 300);
     }
   };
+
+
+  const deleteBill = async ()=>{
+    await billSave ({})
+    const { value: text } = await Swal.fire({
+      input: "textarea",
+      inputLabel: "Porfavor Especifica la razón por la que se rechaza la factura:",
+      inputPlaceholder: "Comentarios...",
+      inputAttributes: {
+        "aria-label": "Porfavor Especifica la razón por la que se rechaza la factura. ",
+      },
+      color: "Black",
+      showCancelButton: true,
+    });
+    let obs = "";
+    if (text) {
+      obs =bill.observations?`${bill.observations}\n \n ${text}`:text;
+    }
+    await billSave({ status: "rechazada", obs: obs });
+    Swal.fire(
+      "rechazada!",
+      "La factura queda en estado rechazada.",
+      "success"
+    );
+  }
+
+
   return (
     <div className={S.maincont}>
       <div>
-        <div className={S.cont}>
+        <div id="factura" className={screenShot ? S.contScreen : S.cont}>
           <div className={S.dropBillProcess}>
             <Dropdown
               billProcess={true}
@@ -227,14 +272,19 @@ export default function Factura() {
               traerBillsProcess={traerBillsProcess}
             />
           </div>
+          <div>
+          {saveBill?<ButtonDeleteBill deleteBill={deleteBill} />:null}
+          </div>
           <HeaderFact bill={bill} setBill={setBill} />
           <DataClient
             client={client}
             setClient={setClient}
             saveBill={saveBill}
+            screenShot={screenShot}
           />
           <HeaderTabla />
           <Row
+            screenShot={screenShot}
             saveBill={saveBill}
             services={services}
             setServices={setServices}
@@ -244,6 +294,7 @@ export default function Factura() {
             bill={bill}
             setBill={setBill}
             services={services}
+            screenShot={screenShot}
           />
         </div>
       </div>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import S from "../factura.module.css";
 import Dropdown from "../Dropdown";
-import x from '../../../assets/Img/x.svg'
+import x from "../../../assets/Img/x.svg";
 const ipcRenderer = window.ipcRenderer;
 
-export default function Row({ services, setServices, saveBill }) {
+export default function Row({ services, setServices, saveBill, screenShot }) {
   const [servicios, setServicios] = useState([]);
   const [stylists, setStylist] = useState([]);
   useEffect(() => {
@@ -78,13 +78,23 @@ export default function Row({ services, setServices, saveBill }) {
     let service;
     if (e.target.name === "amount") {
       let cant =
-        parseInt(numero) <= 0 || isNaN(parseInt(numero)) ? 1 : parseInt(numero)>100?100:  parseInt(numero);
+        parseInt(numero) <= 0 || isNaN(parseInt(numero))
+          ? 1
+          : parseInt(numero) > 100
+          ? 100
+          : parseInt(numero);
       service = {
         amount: cant,
         num_order: e.target.id,
       };
     } else if (e.target.name === "sale") {
-      let sale = parseInt(numero) < 0 || numero === "" ? 0 : parseInt(numero)>services[e.target.id].price*services[e.target.id].amount?services[e.target.id].price*services[e.target.id].amount:     parseInt(numero);
+      let sale =
+        parseInt(numero) < 0 || numero === ""
+          ? 0
+          : parseInt(numero) >
+            services[e.target.id].price * services[e.target.id].amount
+          ? services[e.target.id].price * services[e.target.id].amount
+          : parseInt(numero);
       service = {
         sale: sale,
         num_order: e.target.id,
@@ -106,12 +116,12 @@ export default function Row({ services, setServices, saveBill }) {
     servicess[service.num_order] = newService;
     setServices((services) => servicess);
   };
-  const onHandlerDelete = (e)=>{
-    let newServices = [...services].filter ((ser,idx)=>{
-     return parseInt (e.target.id) !== idx
-    })
-    setServices (newServices)
-  }
+  const onHandlerDelete = (e) => {
+    let newServices = [...services].filter((ser, idx) => {
+      return parseInt(e.target.id) !== idx;
+    });
+    setServices(newServices);
+  };
 
   return services.map((e, idx) => (
     <div
@@ -119,22 +129,31 @@ export default function Row({ services, setServices, saveBill }) {
       style={idx % 2 === 0 ? { backgroundColor: "#fbdada" } : {}}
       className={S.rows}
     >
-      {!e.saved && e.id ? <button id={idx} onClick={onHandlerDelete} className={S.x} >
-        <img src={x} alt="" />
-      </button>:null}
+      {!e.saved && e.id ? (
+        <button id={idx} onClick={onHandlerDelete} className={S.x}>
+          <img src={x} alt="" />
+        </button>
+      ) : null}
       <div className={S.contDesc}>
         {saveBill ? (
           <Dropdown
             idx={idx}
-            options={e.saved?servicios.filter(ser=> ser.service=== e.service ):servicios}
+            options={
+              e.saved
+                ? servicios.filter((ser) => ser.service === e.service)
+                : servicios
+            }
             onHandlerOption={onHandlerService}
             services={true}
-            justServices= {e.saved?e.service?'services':'products':'both'}
+            justServices={
+              e.saved ? (e.service ? "services" : "products") : "both"
+            }
           />
         ) : null}
         <span>{e.name || ""}</span>
       </div>
       <input
+        style={screenShot ? { height: "20px" } : {}}
         disabled={!saveBill || !e.id}
         className={S.cantColumn}
         type="number"
@@ -157,6 +176,7 @@ export default function Row({ services, setServices, saveBill }) {
         {e.price ? "$ " + new Intl.NumberFormat("de-DE").format(e.price) : ""}
       </span>
       <input
+        style={screenShot ? { height: "20px" } : {}}
         disabled={!saveBill || !e.id}
         className={S.descuento}
         value={
@@ -169,7 +189,7 @@ export default function Row({ services, setServices, saveBill }) {
         name="sale"
       />
       <span className={S.totalRow}>
-        {e.price_Total || e.price_Total===0
+        {e.price_Total || e.price_Total === 0
           ? "$ " + new Intl.NumberFormat("de-DE").format(e.price_Total)
           : ""}
       </span>
