@@ -23,8 +23,79 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
+  padding: 0;
+  width: fit-content;
   
 }
 .deleteBill img {
   height: 10px;
 }
+/* ------------------------------------ */
+.searchBar {
+  position: absolute;
+  top:0;
+  left: 0;
+  padding: 20px;
+  display: flex;
+  /* padding: 5px; */
+  /* right: 13%; */
+  align-items: center;
+}
+
+.input {
+  width: 0px;
+  height: 30px;
+  padding: 0 0;
+  text-align: center;
+  color: black;
+  outline: none;
+  border: transparent;
+  border-radius: 30px;
+  transition: all 0.6s ease;
+  margin-top: 5px;
+}
+.input::-webkit-inner-spin-button{
+  display: none;
+}
+
+.input::placeholder {
+  font-size: 14px;
+}
+
+
+.btn {
+  /* position: absolute; */
+  top: 0;
+  left: 0;
+  background: #facdb6;
+  width: 47px;
+  height: 48px;
+  line-height: 55px;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  border-radius: 60%;
+  cursor: pointer;
+  background-image: url("../../../assets/Img/search.svg");
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: none;
+}
+
+
+.searchBar:hover input{
+  width: 160px;
+  border: 1px solid silver;
+  margin-right: 5px;
+}
+
+.searchBar input:focus{
+  width: 160px;
+  border: 1px solid silver;
+  margin-right: 5px;
+}
+
+
+
+/* ------------------------------- */

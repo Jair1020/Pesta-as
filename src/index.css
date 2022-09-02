@@ -2,6 +2,41 @@
 
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  height: 1px;
+  width: 8px;
+  border-radius: 0.5rem;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #ef4a4b;
+  border-radius: 0.5rem;
+}
+
+body::-webkit-scrollbar-track {
+  border-radius: 0.5rem;
+  background-color: #f9c8c8;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  line-height: inherit;
+  /* 1 */
+  color: inherit;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+  padding: 0;
+  /* 3 */
 }
 

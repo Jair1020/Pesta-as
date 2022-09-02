@@ -58,7 +58,12 @@ export default function Count({
       <div className={S.ContTotalsLeft}>
         <span className={S.obs}>Observaciones:</span>
         <textarea
-          disabled={!saveBill}
+          disabled={
+            !saveBill ||
+            bill.status === "rechazada" ||
+            bill.status === "aprobada" ||
+            bill.status === "pendiente"
+          }
           onChange={onHandlerObs}
           className={S.obsImp}
           value={bill.observations ? bill.observations : ""}
@@ -92,7 +97,11 @@ export default function Count({
           </span>
           <input
             style={screenShot ? { height: "20px" } : {}}
-            disabled={!saveBill}
+            disabled={
+              !saveBill ||
+              bill.status === "rechazada" ||
+              bill.status === "aprobada"
+            }
             name="catch"
             value={
               bill.catch ? new Intl.NumberFormat("de-DE").format(bill.catch) : 0
@@ -101,7 +110,11 @@ export default function Count({
           />
           <input
             style={screenShot ? { height: "20px" } : {}}
-            disabled={!saveBill}
+            disabled={
+              !saveBill ||
+              bill.status === "rechazada" ||
+              bill.status === "aprobada"
+            }
             name="transferBanc"
             value={
               bill.transferBanc
@@ -112,7 +125,11 @@ export default function Count({
           />
           <input
             style={screenShot ? { height: "20px" } : {}}
-            disabled={!saveBill}
+            disabled={
+              !saveBill ||
+              bill.status === "rechazada" ||
+              bill.status === "aprobada"
+            }
             name="transferDav"
             value={
               bill.transferDav
@@ -123,7 +140,11 @@ export default function Count({
           />
           <input
             style={screenShot ? { height: "20px" } : {}}
-            disabled={!saveBill}
+            disabled={
+              !saveBill ||
+              bill.status === "rechazada" ||
+              bill.status === "aprobada"
+            }
             name="card"
             value={
               bill.card ? new Intl.NumberFormat("de-DE").format(bill.card) : 0

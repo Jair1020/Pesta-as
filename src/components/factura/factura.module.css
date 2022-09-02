@@ -135,9 +135,12 @@
   border: none;
   background-color: #fdecec;
   border-radius: 5px;
+  color: black;
+  padding-inline: 10px ;
 }
 .search{
   width: 20px;
+  margin-left: 5px;
 }
 .contClient div input::-webkit-inner-spin-button{
   display: none;
@@ -150,6 +153,8 @@
   background-color: #ef4a4b;
   padding: 0.5rem;
   border-radius: 10px 10px 0 0;
+  font-size: medium;
+  font-weight: bold;
   gap:5px
 }
 

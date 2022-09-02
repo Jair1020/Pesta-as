@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
         autoIncrement: true,
       },
       bill_date: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       status: {

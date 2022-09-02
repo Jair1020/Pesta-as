@@ -4,7 +4,13 @@ import Dropdown from "../Dropdown";
 import x from "../../../assets/Img/x.svg";
 const ipcRenderer = window.ipcRenderer;
 
-export default function Row({ services, setServices, saveBill, screenShot }) {
+export default function Row({
+  services,
+  setServices,
+  saveBill,
+  screenShot,
+  bill,
+}) {
   const [servicios, setServicios] = useState([]);
   const [stylists, setStylist] = useState([]);
   useEffect(() => {
@@ -33,6 +39,7 @@ export default function Row({ services, setServices, saveBill, screenShot }) {
   const onHandlerService = (e) => {
     let service;
     if (e.target.attributes[2].value === "true") {
+      
       service = [...servicios].find(
         (ser) => parseInt(e.target.id) === parseInt(ser.id) && ser.service
       );
@@ -59,6 +66,7 @@ export default function Row({ services, setServices, saveBill, screenShot }) {
     const servicess = [...services];
     servicess[service.num_order] = newService;
     setServices((services) => servicess);
+    console.log (servicess)
   };
 
   const onHandlerStylist = (e) => {
@@ -122,6 +130,16 @@ export default function Row({ services, setServices, saveBill, screenShot }) {
     });
     setServices(newServices);
   };
+  const servFiltrados= servicios.filter (e=>{
+    let flag = true 
+    services.forEach (s=>{
+      if (!s.service && parseInt(e.id)===parseInt(s.id)){
+        flag= false
+      }
+    })
+    return flag
+  })
+  
 
   return services.map((e, idx) => (
     <div
@@ -135,13 +153,18 @@ export default function Row({ services, setServices, saveBill, screenShot }) {
         </button>
       ) : null}
       <div className={S.contDesc}>
-        {saveBill ? (
+        {saveBill &&
+        !(
+          bill.status === "rechazada" ||
+          bill.status === "pendiente" ||
+          bill.status === "aprobada"
+        ) ? (
           <Dropdown
             idx={idx}
             options={
               e.saved
-                ? servicios.filter((ser) => ser.service === e.service)
-                : servicios
+                ? servFiltrados.filter((ser) => ser.service === e.service)
+                : servFiltrados
             }
             onHandlerOption={onHandlerService}
             services={true}
@@ -154,7 +177,13 @@ export default function Row({ services, setServices, saveBill, screenShot }) {
       </div>
       <input
         style={screenShot ? { height: "20px" } : {}}
-        disabled={!saveBill || !e.id}
+        disabled={
+          !saveBill ||
+          !e.id ||
+          bill.status === "rechazada" ||
+          bill.status === "pendiente" ||
+          bill.status === "aprobada"
+        }
         className={S.cantColumn}
         type="number"
         value={e.amount ? e.amount : ""}
@@ -163,7 +192,13 @@ export default function Row({ services, setServices, saveBill, screenShot }) {
         name="amount"
       />
       <div className={S.contEst}>
-        {saveBill && e.service ? (
+        {saveBill &&
+        e.service &&
+        !(
+          bill.status === "rechazada" ||
+          bill.status === "pendiente" ||
+          bill.status === "aprobada"
+        ) ? (
           <Dropdown
             idx={idx}
             options={stylists}
@@ -177,7 +212,13 @@ export default function Row({ services, setServices, saveBill, screenShot }) {
       </span>
       <input
         style={screenShot ? { height: "20px" } : {}}
-        disabled={!saveBill || !e.id}
+        disabled={
+          !saveBill ||
+          !e.id ||
+          bill.status === "rechazada" ||
+          bill.status === "pendiente" ||
+          bill.status === "aprobada"
+        }
         className={S.descuento}
         value={
           typeof e.sale === "number"

@@ -6,7 +6,7 @@ const { conn } = require('../src/db/db.js');
 const { getServices } = require('../src/db/requests/Services');
 const { getStylists } = require('../src/db/requests/Stylist');
 const { createClient, getOneClient } = require('../src/db/requests/Client');
-const { createBill, getBillsProcess, updateBill } = require('../src/db/requests/Bill');
+const { createBill, getBillsProcess, updateBill, getOneBill } = require('../src/db/requests/Bill');
 const { getProducts } = require('../src/db/requests/Products');
 const { createServiceDone } = require('../src/db/requests/ServiceDone');
 const {
@@ -14,9 +14,13 @@ const {
   loadProducts,
   loadCategories,
   loadStylist,
-  verifyDb } = require('../src/db/datamockDb.js')
+  verifyDb, 
+  createPassword,
+  loadDates} = require('../src/db/datamockDb.js')
 
-const isDev = require('electron-is-dev')
+const isDev = require('electron-is-dev');
+const { verifyPassword } = require('../src/db/requests/Password.js');
+
 
 
 conn.sync(/* {force:true} */).then(async () => {
@@ -28,6 +32,8 @@ conn.sync(/* {force:true} */).then(async () => {
       await loadProducts();
       await loadServices();
       await loadStylist();
+      await createPassword ('alejoVictoria')
+      // await loadDates ()
     }
   } catch (err) {
     console.log(err)
@@ -40,6 +46,9 @@ function createWindow() {
     width: 1000,
     height: 800,
     center: true,
+    show: false,
+    // frame:false,
+    // autoHideMenuBar: true,
     useContentSize: true,
     simpleFullscreen: true,
     webPreferences: {
@@ -54,13 +63,15 @@ function createWindow() {
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, "../build/index.html")}`
   )
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+  })
 }
 
 
-// app.on('ready', createWindow)
-win.once('ready-to-show', () => {
-  win.show()
-})
+app.on('ready', createWindow)
+
+
 
 // HANDLERS IPC
 
@@ -93,6 +104,10 @@ ipcMain.handle('GET_ONE_CLIENT', async (event, arg) => {
   let client = await getOneClient(arg)
   return client
 })
+ipcMain.handle('GET_ONE_BILL', async (event, arg) => {
+  let bill = await getOneBill(arg)
+  return bill
+})
 
 ipcMain.handle('GET_BILLS_PROCESS', async (event, arg) => {
   let billsProcess = await getBillsProcess()
@@ -108,8 +123,16 @@ ipcMain.handle('SAVE_BILL', async (event, arg) => {
     console.log(err)
     return err
   }
+})
 
-
+ipcMain.handle ('VERIFY_PASS', async (event, arg)=>{
+  try{
+    let verify = await verifyPassword (arg)
+    return verify
+  }catch (err){
+    console.log(err)
+    return err
+  }
 })
 
 
@@ -119,6 +142,11 @@ ipcMain.handle('SAVE_BILL', async (event, arg) => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    // const child = new BrowserWindow({ modal: true, show: false })
+    // child.loadURL (`file://${path.join(__dirname, "modal.html")}`)
+    // child.once('ready-to-show', () => {
+    //   child.show()
+    // })
     app.quit()
   }
 })

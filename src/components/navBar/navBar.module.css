@@ -1,0 +1,88 @@
+.contNavbar {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  /* background-color: #ef6c6c;*/
+  /* background: linear-gradient(to bottom, #ef6c6c 5%, #fbeee6 100%); */
+  width: fit-content;
+  /* padding-block: 5px; */
+  padding-inline: 20px;
+  border-radius: 0 0 10px 10px;
+  /* overflow: hidden; */
+
+}
+
+.buttonVerify {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  height: auto;
+  text-decoration: none;
+  height: 50px;
+}
+
+.NavLinkVerify {
+  pointer-events: none;
+  text-decoration: none;
+  color: black;
+  font-size: larger;
+  font-weight: bold;
+  background-color: #facdb6;
+  padding-block: 5px;
+  padding-inline: 20px;
+  border-radius: 0 0 10px 10px;
+  transition: all 0.3s linear;
+  width: 150px;
+  text-align:center
+}
+
+.actN {
+  pointer-events: none;
+  text-decoration: none;
+  color: black;
+  font-size: larger;
+  font-weight: bold;
+  border-top: 15px solid #ef4a4b;
+  background-color: #ef4a4b;
+  padding-block: 5px;
+  padding-inline: 20px;
+  border-radius: 0 0 10px 10px;
+  transition: all 0.3s linear;
+  width: 150px;
+  text-align:center
+
+}
+
+.act {
+  text-decoration: none;
+  color: black;
+  font-size: larger;
+  font-weight: bold;
+  border-top: 15px solid #ed5a5a;
+  background-color: #ed5a5a;
+  padding-block: 5px;
+  padding-inline: 20px;
+  border-radius: 0 0 10px 10px;
+  transition: all 0.3s linear;
+  width: 150px;
+  text-align:center
+
+}
+
+.NavLink {
+  text-decoration: none;
+  color: black;
+  font-size: larger;
+  font-weight: bold;
+  background-color: #facdb6;
+  padding-block: 5px;
+  padding-inline: 20px;
+  border-radius: 0 0 10px 10px;
+  transition: all 0.3s linear;
+  width: 150px;
+  text-align:center
+}

@@ -42,7 +42,7 @@ export default function HeaderFact({ bill}) {
           </div>
           <div className={S.contFecha}>
             <span className={S.fecha}>Fecha:</span>
-            <span>{bill.bill_date?new Date (bill.bill_date).toLocaleDateString():new Date(Date.now()).toLocaleDateString()}</span>
+            <span>{bill.bill_date?bill.bill_date.split ('-').reverse().join('/'):new Date(Date.now()).toLocaleDateString()}</span>
           </div>
         </div>
       </div>

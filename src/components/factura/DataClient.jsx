@@ -23,6 +23,11 @@ export default function DataClient({
           title: "No se encontro cliente",
         });
   };
+  const onkeypress = (e) => {
+    if (e.key==='Enter'){
+      document.querySelector("#searchClient").click();
+    }
+  }
 
   return (
     <div className={S.contClient}>
@@ -50,6 +55,7 @@ export default function DataClient({
         <label>Documento:</label>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <input
+            onKeyPress={onkeypress}
             style={screenShot ? { height: "20px" } : {}}
             disabled={saveBill}
             type="number"
@@ -58,6 +64,7 @@ export default function DataClient({
             name="id"
           />
           <img
+          id="searchClient"
             style={saveBill ? { display: "none" } : { cursor: "pointer" }}
             onClick={!saveBill ? onHandlerClick : () => {}}
             className={S.search}
