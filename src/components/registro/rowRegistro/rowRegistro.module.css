@@ -2,58 +2,61 @@
   display: flex;
   padding: 0.5rem;
   width: fit-content;
+  align-items: center;
 }
 
 .columnServ {
   text-align: center;
-  font-size: large;
+  font-size:0.9rem;
   font-weight: bold;
-  padding-block:10px;
+  padding-block:3px;
   margin: 0;
   width: 250px;
 }
 
 .columnClie {
   text-align: center;
-  font-size: large;
+  font-size: 0.9rem;
   font-weight: bold;
-  padding-block:10px;
+  padding-block:3px;
   margin: 0;
   width: 150px;
 }
 
 .columnEstil {
   text-align: center;
-  font-size: large;
+  font-size: 0.9rem;
   font-weight: bold;
-  padding-block:10px;
+  padding-block:3px;
   margin: 0;
   width: 150px;
 }
 
 .columnEstado {
   text-align: center;
-  font-size: large;
+  font-size: 0.9rem;
   font-weight: bold;
-  padding-block:10px;
+  padding-block:3px;
   margin: 0;
   width: 70px;
 }
 
 .columnPrecio {
   text-align: center;
-  font-size: large;
+  font-size: 0.9rem;
   font-weight: bold;
-  padding-block:10px;
+  padding-block:3px;
   margin: 0;
   width: 70px;
 }
 
 .columnVer {
   text-align: center;
-  font-size: large;
-  font-weight: bold;
-  padding-block:10px;
+  padding-block:3px;
   margin: 0;
   width: 50px;
+}
+.columnVer img { 
+  width: 20px;
+  cursor: pointer;
 }

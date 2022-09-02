@@ -9,6 +9,7 @@ export default function Count({
   services,
   saveBill,
   screenShot,
+  modal
 }) {
   useEffect(() => {
     let t = services.reduce((acc, e) => {
@@ -54,7 +55,7 @@ export default function Count({
   };
 
   return (
-    <div className={S.ContTotals}>
+    <div style={modal?{pointerEvents:'none'}:{}} className={S.ContTotals}>
       <div className={S.ContTotalsLeft}>
         <span className={S.obs}>Observaciones:</span>
         <textarea

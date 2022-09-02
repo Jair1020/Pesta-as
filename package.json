@@ -1,7 +1,7 @@
 {
   "name": "pestanas",
   "version": "0.1.0",
-  "description": "Control de facturas",
+  "description": "Control de ventas",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
@@ -58,7 +58,7 @@
     },
     "win": {
       "target": "NSIS",
-      "icon": "build/icon.ico"
+      "icon": "build/favicon.ico"
     },
     "files": [
       "dist/**/*",

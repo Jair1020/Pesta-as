@@ -78,7 +78,6 @@ const getDailyServices = async () => {
     let billsData = JSON.parse(JSON.stringify(bills))
     let servicesdaily =[];
     billsData.map ((b)=>{
-      // console.log ('...>',servicesdaily)
       let dataBill = {
         id_bill:b.id,
         name_client:b.client.name_client,
@@ -105,11 +104,9 @@ const getDailyServices = async () => {
         servicesdaily.push({...dataBill})
       })
       servicesdaily= servicesdaily.sort ((a,b)=>a.id_bill-b.id_bill).sort ((a,b)=>a.num_order-b.num_order)
-
-
-      console.log('servicesfiltro', servicesdaily)
     })
-   
+    
+    return servicesdaily
 
   } catch (err) {
     console.log(err)
@@ -117,8 +114,8 @@ const getDailyServices = async () => {
   }
 }
 
-getDailyServices()
 
 module.exports = {
-  createServiceDone
+  createServiceDone,
+  getDailyServices,
 }

@@ -8,15 +8,15 @@ const { getStylists } = require('../src/db/requests/Stylist');
 const { createClient, getOneClient } = require('../src/db/requests/Client');
 const { createBill, getBillsProcess, updateBill, getOneBill } = require('../src/db/requests/Bill');
 const { getProducts } = require('../src/db/requests/Products');
-const { createServiceDone } = require('../src/db/requests/ServiceDone');
+const { createServiceDone, getDailyServices } = require('../src/db/requests/ServiceDone');
 const {
   loadServices,
   loadProducts,
   loadCategories,
   loadStylist,
-  verifyDb, 
+  verifyDb,
   createPassword,
-  loadDates} = require('../src/db/datamockDb.js')
+  loadDates } = require('../src/db/datamockDb.js')
 
 const isDev = require('electron-is-dev');
 const { verifyPassword } = require('../src/db/requests/Password.js');
@@ -25,14 +25,14 @@ const { verifyPassword } = require('../src/db/requests/Password.js');
 
 conn.sync(/* {force:true} */).then(async () => {
   try {
-    const verify = await verifyDb ()
+    const verify = await verifyDb()
     if (!verify.length) {
-      console.log ('cargando...')
+      console.log('cargando...')
       await loadCategories();
       await loadProducts();
       await loadServices();
       await loadStylist();
-      await createPassword ('alejoVictoria')
+      await createPassword('alejoVictoria')
       // await loadDates ()
     }
   } catch (err) {
@@ -45,10 +45,16 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
+    minWidth: 700,
+    minHeight: 500,
+    // closable:false,
+    title: "Pestañas",
+    icon:__dirname + '/favicon.ico',
     center: true,
     show: false,
+    // backgroundColor:'#f9c8c8',
     // frame:false,
-    // autoHideMenuBar: true,
+    autoHideMenuBar: true,
     useContentSize: true,
     simpleFullscreen: true,
     webPreferences: {
@@ -125,12 +131,22 @@ ipcMain.handle('SAVE_BILL', async (event, arg) => {
   }
 })
 
-ipcMain.handle ('VERIFY_PASS', async (event, arg)=>{
-  try{
-    let verify = await verifyPassword (arg)
+ipcMain.handle('VERIFY_PASS', async (event, arg) => {
+  try {
+    let verify = await verifyPassword(arg)
     return verify
-  }catch (err){
+  } catch (err) {
     console.log(err)
+    return err
+  }
+})
+
+ipcMain.handle('GET_DAILY_SERVICES', async (event, arg) => {
+  try {
+    let dailyServices = await getDailyServices()
+    return dailyServices
+  } catch (err) {
+    console.error(err)
     return err
   }
 })

@@ -1,5 +1,4 @@
 import { Route, Routes, HashRouter } from 'react-router-dom'
-import './App.css';
 import Factura from './components/factura/Factura';
 import NavBar from './components/navBar/NavBar';
 import Registro from './components/registro/Registro';
@@ -16,9 +15,7 @@ function App() {
         <Routes>
           <Route exact path='/*' element={<Factura />} />
           <Route exact path='/registro' element={<Registro />} />
-          <Route exact path='/registroGeneral' element=
-            {<RegistroGeneral/>}
-          />
+          <Route exact path='/registroGeneral' element={<RegistroGeneral/>}/>
         </Routes>
       </HashRouter>
     </>

@@ -30,7 +30,6 @@ export default function Factura() {
     let billsProcess = await ipcRenderer.invoke("GET_BILLS_PROCESS");
     let newBill = { client: {}, bill: {}, service: [{}, {}, {}, {}] };
     setBillProcess((b) => [newBill, ...billsProcess]);
-
   };
 
   useEffect(() => {
@@ -107,7 +106,7 @@ export default function Factura() {
       info.bill.status = status;
     }
     try {
-      console.log (info.services)
+      console.log(info.services);
       const billSave = await ipcRenderer.invoke("SAVE_BILL", info);
       let servicesSaved = [...services].map((e) => {
         let service = { ...e };
@@ -263,11 +262,11 @@ export default function Factura() {
     Swal.fire("rechazada!", "La factura queda en estado rechazada.", "success");
   };
   const handlerSearchBill = async (id) => {
-    let clientFound = await ipcRenderer.invoke("GET_ONE_BILL", id);
-    if (clientFound) {
-      setBill((e) => clientFound.bill);
-      setServices((e) => clientFound.service);
-      setClient((e) => clientFound.client);
+    let billFound = await ipcRenderer.invoke("GET_ONE_BILL", id);
+    if (billFound) {
+      setBill((e) => billFound.bill);
+      setServices((e) => billFound.service);
+      setClient((e) => billFound.client);
       setSaveBill(true);
       setTimeout(() => {
         setBillUpdated(true);
@@ -279,64 +278,65 @@ export default function Factura() {
       });
     }
   };
-   
 
   return (
     <div className={S.maincont}>
       <ButtonSearchBill handlerSearchBill={handlerSearchBill} />
-      <div>
-        <div id="factura" className={screenShot ? S.contScreen : S.cont}>
-          <div className={S.dropBillProcess}>
-            <Dropdown
-              billProcess={true}
-              options={billProcess
-                .map((e) => {
-                  return { name: e.client.name_client, id: e.bill.id };
-                })
-                .filter((e) => e.id !== bill.id)}
-              onHandlerOption={onHandlerBillProcess}
-              traerBillsProcess={traerBillsProcess}
-            />
-          </div>         
-            {saveBill &&
-            !(
-              bill.status === "rechazada" ||
-              bill.status === "aprobada" ||
-              bill.status === "pendiente"
-            ) ? (
-              <ButtonDeleteBill deleteBill={deleteBill} />
-            ) : null}         
-          <HeaderFact bill={bill} />
-          <DataClient
-            client={client}
-            setClient={setClient}
-            saveBill={saveBill}
-            screenShot={screenShot}
-          />
-          <HeaderTabla />
-          <Row
-            bill={bill}
-            screenShot={screenShot}
-            saveBill={saveBill}
-            services={services}
-            setServices={setServices}
-          />
-          <Count
-            saveBill={saveBill}
-            bill={bill}
-            setBill={setBill}
-            services={services}
-            screenShot={screenShot}
+      <div id="factura" className={screenShot ? S.contScreen : S.cont}>
+        <div className={S.dropBillProcess}>
+          <Dropdown
+            billProcess={true}
+            options={billProcess
+              .map((e) => {
+                return { name: e.client.name_client, id: e.bill.id };
+              })
+              .filter((e) => e.id !== bill.id)}
+            onHandlerOption={onHandlerBillProcess}
+            traerBillsProcess={traerBillsProcess}
           />
         </div>
+        {saveBill &&
+        !(
+          bill.status === "rechazada" ||
+          bill.status === "aprobada" ||
+          bill.status === "pendiente"
+        ) ? (
+          <ButtonDeleteBill deleteBill={deleteBill} />
+        ) : null}
+        <HeaderFact bill={bill} />
+        <DataClient
+          client={client}
+          setClient={setClient}
+          saveBill={saveBill}
+          screenShot={screenShot}
+        />
+        <HeaderTabla />
+        <Row
+          bill={bill}
+          screenShot={screenShot}
+          saveBill={saveBill}
+          services={services}
+          setServices={setServices}
+        />
+        <Count
+          saveBill={saveBill}
+          bill={bill}
+          setBill={setBill}
+          services={services}
+          screenShot={screenShot}
+        />
       </div>
       <div className={S.contButtons}>
         {!saveBill ? (
           <ButtonCreate createBill={createBill} />
         ) : (
           <>
-            {bill.status!=='aprobada' && bill.status!=='rechazada' ?<ButtonSave billSave={billSave} />:null}
-            {bill.status!=='aprobada' && bill.status!=='rechazada'?<ButtonBilling facturar={facturar} />:null}
+            {bill.status !== "aprobada" && bill.status !== "rechazada" ? (
+              <ButtonSave billSave={billSave} />
+            ) : null}
+            {bill.status !== "aprobada" && bill.status !== "rechazada" ? (
+              <ButtonBilling facturar={facturar} />
+            ) : null}
           </>
         )}
       </div>

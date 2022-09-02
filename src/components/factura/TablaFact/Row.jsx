@@ -10,6 +10,7 @@ export default function Row({
   saveBill,
   screenShot,
   bill,
+  modal
 }) {
   const [servicios, setServicios] = useState([]);
   const [stylists, setStylist] = useState([]);
@@ -142,10 +143,10 @@ export default function Row({
   
 
   return services.map((e, idx) => (
-    <div
+    <div 
       key={idx}
       style={idx % 2 === 0 ? { backgroundColor: "#fbdada" } : {}}
-      className={S.rows}
+      className={modal?S.rowsModal:S.rows}
     >
       {!e.saved && e.id ? (
         <button id={idx} onClick={onHandlerDelete} className={S.x}>
