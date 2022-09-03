@@ -15,6 +15,12 @@ module.exports = (sequelize) => {
     },
     num_order:{
       type:DataTypes.INTEGER,
+    },
+    price_Total:{
+      type: DataTypes.VIRTUAL,
+      get (){
+        return ((this.price * this.amount) - this.sale)   
+      }
     }
   },{ timestamps: false})
 }

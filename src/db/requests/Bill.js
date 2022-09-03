@@ -50,17 +50,18 @@ const getBillsProcess = async () => {
       }
       let client = e.client
       let servicess = e.serviceDones.map((e) => {
+        console.log ()
         return {
           id_Done: e.id,
           sale: e.sale,
           amount: e.amount,
-          price_Total: e.price,
+          price_Total: e.price_Total,
           num_order: e.num_order,
           id: e.serviceId,
           id_stylist: e.stylistId,
           name_service: e.service.name_service,
           name: e.service.name_service,
-          price: e.service.price,
+          price: e.price,
           name_stylist: e.stylist.name_stylist,
           service: true,
           saved: true
@@ -70,10 +71,10 @@ const getBillsProcess = async () => {
         return {
           id: e.id,
           name_product: e.name_product,
-          price: e.price,
+          price: e.product_Bill.price,
           sale: e.product_Bill.sale,
           amount: e.product_Bill.amount,
-          price_Total: e.product_Bill.price,
+          price_Total: e.product_Bill.price_Total,
           num_order: e.product_Bill.num_order,
           service: false,
           saved: true,
@@ -144,13 +145,13 @@ const getOneBill = async (id) => {
         id_Done: e.id,
         sale: e.sale,
         amount: e.amount,
-        price_Total: e.price,
+        price_Total: e.price_Total,
         num_order: e.num_order,
         id: e.serviceId,
         id_stylist: e.stylistId,
         name_service: e.service.name_service,
         name: e.service.name_service,
-        price: e.service.price,
+        price: e.price,
         name_stylist: e.stylist.name_stylist,
         service: true,
         saved: true
@@ -161,9 +162,9 @@ const getOneBill = async (id) => {
         id: e.id,
         name_product: e.name_product,
         price: e.price,
-        sale: e.product_Bill.sale,
+        sale: e.product_Bill.price,
         amount: e.product_Bill.amount,
-        price_Total: e.product_Bill.price,
+        price_Total: e.product_Bill.price_Total,
         num_order: e.product_Bill.num_order,
         service: false,
         saved: true,

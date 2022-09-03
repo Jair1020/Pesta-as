@@ -5,7 +5,7 @@ const createServiceDone = async (serv) => {
   try {
     const { id_bill, services } = serv
     const servicess = services.filter((e) => e.service)
-    const product = services.filter((e) => (!e.service && e.price_Total))
+    const product = services.filter((e) => (!e.service && e.price))
     let servicesDondeID = []
 
     const bill = await Bill.findByPk(id_bill, {
@@ -20,7 +20,7 @@ const createServiceDone = async (serv) => {
       let newService = {
         sale: e.sale,
         amount: e.amount,
-        price: e.price_Total,
+        price: e.price,
         num_order: e.num_order
       }
       if (e.saved) {
@@ -44,7 +44,7 @@ const createServiceDone = async (serv) => {
         through: {
           sale: e.sale,
           amount: e.amount,
-          price: e.price_Total,
+          price: e.price,
           num_order: e.num_order
         }
       })
@@ -85,7 +85,7 @@ const getDailyServices = async () => {
       }
       
       b.serviceDones.map (s=>{
-        dataBill.price=s.price;
+        dataBill.price=s.price_Total;
         dataBill.num_order=s.num_order;
         dataBill.name_service=s.service.name_service;
         dataBill.name_stylist=s.stylist.name_stylist
@@ -98,7 +98,7 @@ const getDailyServices = async () => {
       }
       
       b.products.map (p=>{
-        dataBill.price=p.product_Bill.price;
+        dataBill.price=p.product_Bill.price_Total;
         dataBill.num_order=p.product_Bill.num_order;
         dataBill.name_product=p.name_product;
         servicesdaily.push({...dataBill})
