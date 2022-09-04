@@ -3,11 +3,11 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 
 const { conn } = require('../src/db/db.js');
 
-const { getServices } = require('../src/db/requests/Services');
-const { getStylists } = require('../src/db/requests/Stylist');
+const { getServices, updateService, createService } = require('../src/db/requests/Services');
+const { getStylists, updateStylist, createStylist } = require('../src/db/requests/Stylist');
 const { createClient, getOneClient } = require('../src/db/requests/Client');
 const { createBill, getBillsProcess, updateBill, getOneBill } = require('../src/db/requests/Bill');
-const { getProducts } = require('../src/db/requests/Products');
+const { getProducts, updateProduct, createProduct } = require('../src/db/requests/Products');
 const { createServiceDone, getDailyServices } = require('../src/db/requests/ServiceDone');
 const {
   loadServices,
@@ -20,10 +20,11 @@ const {
 
 const isDev = require('electron-is-dev');
 const { verifyPassword } = require('../src/db/requests/Password.js');
+const { getCategories } = require('../src/db/requests/Categories.js');
 
 
 
-conn.sync(/* {force:true} */).then(async () => {
+conn.sync({force:true}).then(async () => {
   try {
     const verify = await verifyDb()
     if (!verify.length) {
@@ -49,12 +50,12 @@ function createWindow() {
     minHeight: 500,
     // closable:false,
     title: "Pestañas",
-    icon:__dirname + '/favicon.ico',
+    icon: __dirname + '/favicon.ico',
     center: true,
     show: false,
     // backgroundColor:'#f9c8c8',
     // frame:false,
-    autoHideMenuBar: true,
+    // autoHideMenuBar: true,
     useContentSize: true,
     simpleFullscreen: true,
     webPreferences: {
@@ -89,6 +90,11 @@ ipcMain.handle('GET_SERVICES', async (event, arg) => {
 ipcMain.handle('GET_PRODUCTS', async (event, arg) => {
   let products = await getProducts()
   return products
+})
+
+ipcMain.handle('GET_CATEGORIES', async (event, arg) => {
+  let categories = await getCategories()
+  return categories
 })
 
 ipcMain.handle('GET_STYLISTS', async (event, arg) => {
@@ -145,6 +151,63 @@ ipcMain.handle('GET_DAILY_SERVICES', async (event, arg) => {
   try {
     let dailyServices = await getDailyServices()
     return dailyServices
+  } catch (err) {
+    console.error(err)
+    return err
+  }
+})
+
+ipcMain.handle('UPDATE_PRODUCT', async (event, arg) => {
+  try {
+    let updatedProduct = await updateProduct (arg)
+    return updatedProduct
+  } catch (err) {
+    console.error(err)
+    return err
+  }
+})
+ipcMain.handle('UPDATE_SERVICE', async (event, arg) => {
+  try {
+    let updatedService = await updateService (arg)
+    return updatedService
+  } catch (err) {
+    console.error(err)
+    return err
+  }
+})
+ipcMain.handle('UPDATE_STYLIST', async (event, arg) => {
+  try {
+    let updatedStylist = await updateStylist (arg)
+    return updatedStylist
+  } catch (err) {
+    console.error(err)
+    return err
+  }
+})
+
+
+ipcMain.handle('ADD_PRODUCT', async (event, arg) => {
+  try {
+    let newProduct = await createProduct (arg)
+    return newProduct
+  } catch (err) {
+    console.error(err)
+    return err
+  }
+})
+ipcMain.handle('ADD_SERVICE', async (event, arg) => {
+  try {
+    let newService = await createService (arg)
+    return newService
+  } catch (err) {
+    console.error(err)
+    return err
+  }
+})
+ipcMain.handle('ADD_STYLIST', async (event, arg) => {
+  try {
+    let newStylist = await createStylist (arg)
+    return newStylist
   } catch (err) {
     console.error(err)
     return err

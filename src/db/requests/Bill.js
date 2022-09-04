@@ -50,7 +50,6 @@ const getBillsProcess = async () => {
       }
       let client = e.client
       let servicess = e.serviceDones.map((e) => {
-        console.log ()
         return {
           id_Done: e.id,
           sale: e.sale,
@@ -161,8 +160,8 @@ const getOneBill = async (id) => {
       return {
         id: e.id,
         name_product: e.name_product,
-        price: e.price,
-        sale: e.product_Bill.price,
+        price: e.product_Bill.price,
+        sale: e.product_Bill.sale,
         amount: e.product_Bill.amount,
         price_Total: e.product_Bill.price_Total,
         num_order: e.product_Bill.num_order,

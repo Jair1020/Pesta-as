@@ -1,0 +1,48 @@
+.cont{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-inline: 2%;
+  padding-block: 1%;
+  box-shadow: 0 1px 6px 2px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  width: 300px;
+  background-color:#fdeded;
+
+}
+
+.cont div {
+  display: flex;
+  flex-direction: column;
+}
+
+.cont div label{
+  font-weight: bold;
+}
+.cont div input{
+  font-size:small;
+  border-radius: 10px;
+  border: none;
+  padding-block: 2px;
+  padding-inline: 5px;
+  width:auto;
+}
+
+.icons{
+  position: absolute;
+  display: flex;
+  flex-direction: row !important;
+  gap: 10px;
+  top: 3px;
+  right: 6px;
+}
+
+.icons img{
+  position: relative;
+  display: inline;
+  pointer-events: all;
+  cursor: pointer;
+  width: 20px;
+
+}

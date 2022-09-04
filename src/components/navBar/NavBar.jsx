@@ -10,39 +10,56 @@ export default function NavBar() {
   let navigate = useNavigate();
   const location = useLocation();
   const verify = async (e) => {
-    console.log (location.pathname)
+
     if (location.pathname !== "/registroGeneral") {
-      const { value: password } = await Swal.fire({
-        title: "Ruta Protegida",
-        input: "password",
-        inputLabel: "Ingrese su Contraseña",
-        inputPlaceholder: "Contraseña...",
-        inputAttributes: {
-          maxlength: 20,
-          autocapitalize: "off",
-          autocorrect: "off",
-        },
-      });
-      let verify = await ipcRenderer.invoke("VERIFY_PASS", password);
-      if (verify) {
-        return navigate("/registroGeneral")
-        // document.querySelector("#NavLink").click();
-      } else {
-        Toast.fire({
-          icon: "error",
-          title: "Contraseña incorrecta",
-          width:'290px'
+      if (location.pathname !== "/settings") {
+        const { value: password } = await Swal.fire({
+          title: "Ruta Protegida",
+          input: "password",
+          inputLabel: "Ingrese su Contraseña",
+          inputPlaceholder: "Contraseña...",
+          inputAttributes: {
+            maxlength: 20,
+            autocapitalize: "off",
+            autocorrect: "off",
+          },
         });
+        let verify = await ipcRenderer.invoke("VERIFY_PASS", password);
+        if (verify) {
+          return navigate("/registroGeneral");
+          // document.querySelector("#NavLink").click();
+        } else {
+          Toast.fire({
+            icon: "error",
+            title: "Contraseña incorrecta",
+            width: "290px",
+          });
+        }
+      } else {
+        return navigate("/registroGeneral");
       }
     }
   };
 
   return (
-    <div className={S.contNavbar} >
-      <NavLink className={({ isActive }) =>isActive?S.act:S.NavLink} to="/">Facturación</NavLink>
-      <NavLink className={({ isActive }) =>isActive?S.act:S.NavLink} to="/registro">Reporte Diario</NavLink>
+    <div className={S.contNavbar}>
+      <NavLink
+        className={({ isActive }) => (isActive ? S.act : S.NavLink)}
+        to="/"
+      >
+        Facturación
+      </NavLink>
+      <NavLink
+        className={({ isActive }) => (isActive ? S.act : S.NavLink)}
+        to="/registro"
+      >
+        Reporte Diario
+      </NavLink>
       <div onClick={verify} className={S.buttonVerify}>
-        <NavLink className={({ isActive }) =>isActive?S.actN:S.NavLinkVerify} to="/registroGeneral">
+        <NavLink
+          className={({ isActive }) => (isActive ? S.actN : S.NavLinkVerify)}
+          to="/registroGeneral"
+        >
           Reporte General
         </NavLink>
       </div>

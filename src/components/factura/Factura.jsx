@@ -62,7 +62,6 @@ export default function Factura() {
     } else {
       // setBill ({bill_date:new Date(Date.now())})}
       let createclient = await ipcRenderer.invoke("CREATE_CLIENT", client);
-      console.log("createClient", createclient);
       let createBill = await ipcRenderer.invoke("CREATE_BILL", {
         bill_date: new Date(Date.now()),
         id_client: client.id,
@@ -106,7 +105,6 @@ export default function Factura() {
       info.bill.status = status;
     }
     try {
-      console.log(info.services);
       const billSave = await ipcRenderer.invoke("SAVE_BILL", info);
       let servicesSaved = [...services].map((e) => {
         let service = { ...e };

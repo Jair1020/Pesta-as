@@ -17,7 +17,7 @@ export const clientVal = (client) => {
     error.name_client = "Nombre demaciado largo"
   }
 
-  if (!client.email || !client.email.trim()) {
+  /* if (!client.email || !client.email.trim()) {
     error.email = "Ingresar email del cliente"
   } else if (
     !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
@@ -27,7 +27,7 @@ export const clientVal = (client) => {
     error.email = "El correo debe ser tipo info@info.com";
   }else if (client.email.length >30){
     error.email = "Correo demaciado largo";
-  }
+  } */
 
   if (client.phone && client.phone.trim().length>=20){
     error.phone = "Numero telefonico demaciado largo"

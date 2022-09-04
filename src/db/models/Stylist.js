@@ -20,6 +20,10 @@ module.exports = (sequelize) => {
       phone: {
         type: DataTypes.STRING,
       },
+      disabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       timestamps: false,

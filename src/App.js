@@ -3,6 +3,7 @@ import Factura from './components/factura/Factura';
 import NavBar from './components/navBar/NavBar';
 import Registro from './components/registro/Registro';
 import RegistroGeneral from './components/registroGeneral/RegistroGeneral';
+import Settings from './components/settings/Settings';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route exact path='/*' element={<Factura />} />
           <Route exact path='/registro' element={<Registro />} />
           <Route exact path='/registroGeneral' element={<RegistroGeneral/>}/>
+          <Route exact path='/settings' element={<Settings/>}/>
         </Routes>
       </HashRouter>
     </>

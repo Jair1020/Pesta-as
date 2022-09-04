@@ -12,8 +12,8 @@ export default function RowRegistro({ dailyServices, seeBill }) {
       }
       className={S.contRowReg}
     >
-      <span className={S.columnServ}>{e.name_service || e.name_product}</span>
       <span className={S.columnClie}>{e.name_client}</span>
+      <span className={S.columnServ}>{e.name_service || e.name_product}</span>
       <span className={S.columnEstil}>{e.name_stylist || "-------"}</span>
       <span className={S.columnEstado}>
         {e.status[0].toUpperCase() + e.status.substring(1)}
