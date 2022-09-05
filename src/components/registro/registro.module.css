@@ -5,3 +5,18 @@
   align-items: center;
   margin-top: 50px;
 }
+
+.inconExpense{
+  position: absolute;
+  top:0;
+  right: 0;
+  cursor: pointer;
+
+
+}
+.inconReport{
+  position: absolute;
+  top:8px;
+  right: 70px;
+  cursor: pointer;
+}

@@ -5,7 +5,7 @@ const { conn } = require('../src/db/db.js');
 
 const { getServices, updateService, createService } = require('../src/db/requests/Services');
 const { getStylists, updateStylist, createStylist } = require('../src/db/requests/Stylist');
-const { createClient, getOneClient } = require('../src/db/requests/Client');
+const { createClient, getOneClient, getBillsClient } = require('../src/db/requests/Client');
 const { createBill, getBillsProcess, updateBill, getOneBill } = require('../src/db/requests/Bill');
 const { getProducts, updateProduct, createProduct } = require('../src/db/requests/Products');
 const { createServiceDone, getDailyServices } = require('../src/db/requests/ServiceDone');
@@ -16,11 +16,14 @@ const {
   loadStylist,
   verifyDb,
   createPassword,
-  loadDates } = require('../src/db/datamockDb.js')
+  loadDates,
+  updatePercentage, 
+  } = require('../src/db/datamockDb.js')
 
 const isDev = require('electron-is-dev');
 const { verifyPassword } = require('../src/db/requests/Password.js');
 const { getCategories } = require('../src/db/requests/Categories.js');
+const { createExpense } = require('../src/db/requests/Expense.js');
 
 
 
@@ -33,7 +36,8 @@ conn.sync({force:true}).then(async () => {
       await loadProducts();
       await loadServices();
       await loadStylist();
-      await createPassword('alejoVictoria')
+      await createPassword('a')
+      await updatePercentage ()  
       // await loadDates ()
     }
   } catch (err) {
@@ -214,6 +218,24 @@ ipcMain.handle('ADD_STYLIST', async (event, arg) => {
   }
 })
 
+ipcMain.handle ('GET_LAST_BILL_CLIENT', async (event, arg)=>{
+  try{
+    let Bills= await getBillsClient (arg)
+    return Bills
+  }catch (err){
+    return err
+  }
+})
+
+ipcMain.handle ('CREATE_EXPENSE', async (event,arg)=>{
+  try{
+    let newExpense = await createExpense (arg)
+    return (newExpense)
+  }catch (err){
+    return err
+  }
+
+})
 
 
 //----------------------------------------------//

@@ -1,4 +1,5 @@
-const { Category, Service, Product, Stylist, Password, Bill } = require('./db')
+const { Category, Service, Product, Stylist, Password, Bill,Stylist_Category } = require('./db')
+const { createBill } = require('./requests/Bill')
 const { createClient } = require('./requests/Client')
 
 
@@ -39,7 +40,6 @@ const stylists = [
     name_stylist: "Daniela Alvarez Tovar",
     email: "daniel@gmail.com",
     phone: "3223957784"
-
   },
   {
     id: '1010215180',
@@ -124,8 +124,16 @@ const loadProducts = async () => {
   }));
 };
 const loadStylist = async () => {
+  let categories= await Category.findAll({raw:true})
+  
   await Promise.all(stylists.map(async (s) => {
     let stylist = await Stylist.create(s)
+    categories.map ((e)=>{
+      if (e.name_category!=='producto'){
+        stylist.addCategory (e.id)
+      }
+    })
+
   }))
 }
 
@@ -153,9 +161,9 @@ const createPassword = async (pass) => {
 const loadDates = async () => {
 
   let client = await createClient({
-    id:1010215141,
-    name_client:'Jair Avila',
-    email:'jair@gmail.com'
+    id: 1010215141,
+    name_client: 'Jair Avila',
+    email: 'jair@gmail.com'
   })
 
 
@@ -168,12 +176,12 @@ const loadDates = async () => {
     var date = new Date(this.valueOf())
     date.setDate(date.getDate() - days)
     return date
-    
+
   }
   const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
   const day = new Date().subtractDays(10)
-  range(1, 20, 1).map ((e,id)=>{
-    range (1,10,1).map (async(e,idx)=>{
+  range(1, 20, 1).map((e, id) => {
+    range(1, 10, 1).map(async (e, idx) => {
       try {
         const newBill = await Bill.create({
           bill_date: day.addDays(id),
@@ -181,20 +189,35 @@ const loadDates = async () => {
         }
         )
         await newBill.setClient(1010215141)
-       
+
       } catch (err) {
         console.log(err)
         return 'Ocurrio un error al crear la factura'
       }
     })
   })
-
-
-
-
-
-
 }
+const loadFirtsBill = async () => {
+  try {
+    let client = {
+      name_client: 'Jair Avila Gómez',
+      id: 1010215141
+    }
+    await createClient(client)
+    let bill = {
+      id: 1000,
+      bill_date: new Date(Date.now()),
+      id_client: client.id,
+      status:'initial'
+    }
+    await createBill(bill)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+
+
 
 module.exports = {
   verifyDb,
@@ -203,5 +226,7 @@ module.exports = {
   loadProducts,
   loadStylist,
   createPassword,
-  loadDates
+  loadDates,
+  loadFirtsBill,
+  updatePercentage
 } 

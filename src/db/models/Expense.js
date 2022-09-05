@@ -2,22 +2,24 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    "client",
+    "expense",
     {
       id: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
+        autoIncrement: true,
       },
-      name_client: {
+      expense_reason: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      email: {
-        type: DataTypes.STRING,
+      expense_date: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
       },
-      phone: {
+      expense_price: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {

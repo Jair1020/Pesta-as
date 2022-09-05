@@ -3,6 +3,10 @@ import HeaderRegistro from "./headerRegistro/HeaderRegistro";
 import ModalBill from "./modalBill/ModalBill";
 import S from "./registro.module.css";
 import RowRegistro from "./rowRegistro/RowRegistro";
+import expense from '../../assets/Img/expense.png'
+import ModalExpense from "./modalExpense/ModalExpense";
+import report from '../../assets/Img/report.png'
+import ReportModal from "./dailyBalance/reportModal/ReportModal";
 const ipcRenderer = window.ipcRenderer;
 
 
@@ -11,6 +15,8 @@ export default function Registro() {
   const [modal, setModal] = useState ({
     state:false
   })
+  const [modalReport, setModalReport] = useState (false)
+  const [modalExpense, setModalExpense] = useState (false)
   
   useEffect (()=>{
     const getDailyServices = async ()=>{
@@ -32,13 +38,15 @@ export default function Registro() {
     }
   }
 
-
-
   return (
     <div className={S.contRegistro}>
       <HeaderRegistro />
       <RowRegistro dailyServices={dailyServices} seeBill={seeBill} />
       {modal.state && <ModalBill client={modal.client} bill={modal.bill} services={modal.services} setModal={setModal} />}
+      <img className={S.inconExpense} src={expense} alt="" onClick={()=>setModalExpense(true)}/>
+      <img className={S.inconReport} src={report} onClick={()=>setModalReport(true)} />
+      {modalExpense && <ModalExpense setModalExpense={setModalExpense}/>}
+      {modalReport && <ReportModal setModalReport={setModalReport}/>}
     </div>
   );
 }

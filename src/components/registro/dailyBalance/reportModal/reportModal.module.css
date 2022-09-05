@@ -12,9 +12,9 @@
 
 .contMainModal{
   position: fixed;
-  /* display: flex;
+  display: flex;
   justify-content: center;
-  align-items: center; */
+  align-items: center;
   overflow-x: hidden;
   overflow-y:auto;
   padding-top:0;
@@ -52,22 +52,26 @@
 
 .contModal{
   position: relative;
-  width: 95%;
+  /* width: 40%; */
   height: auto;
   margin-top: 1rem/* 24px */;
   margin-bottom: 1rem/* 24px */;
   margin-left: auto;
   margin-right: auto;
-  max-width: 80vw;
-  background-color: white;
+  max-width: 100vw;
+  background-color: #facdb6;
   border-radius: 20px;
-  min-width: 700px;
+  /* min-width: 700px; */
   padding-block: 10px;
 
 }
 .maincont{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-inline: 30px;
   margin-block: 20px;
+  gap: 10px;
 }
 
 .volver{
@@ -77,3 +81,5 @@
   width: 15px;
   cursor: pointer;
 }
+
+

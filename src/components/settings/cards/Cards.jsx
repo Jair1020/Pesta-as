@@ -6,10 +6,14 @@ import editdoc from "../../../assets/Img/editdoc.png";
 import x from "../../../assets/Img/x.svg";
 import S from "./cards.module.css";
 import Swal from "sweetalert2";
+import percentage from "../../../assets/Img/percentage.png"
 const ipcRenderer = window.ipcRenderer;
 
 export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
   const [input, setInput] = useState({});
+  const [modalPercentages, setModalPercentages]= useState (false)
+  const [percentages, setPercentages] = useState ([])
+
   const keys =
     idxseccion === 0
       ? {
@@ -143,6 +147,12 @@ export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
       }
     });
   };
+  const onHandlerPercentages = ()=>{
+    
+
+
+    setModalPercentages (true)
+  }
   return seccion.map((e) => (
     <div
       className={S.cont}
@@ -153,6 +163,7 @@ export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
         {e.id === input.id ? (
           <>
             <img src={savedisk} alt="" onClick={saveInput} />
+            {!idxseccion?<img src={percentage} onClick={onHandlerPercentages} alt=""/>:null}
             <img id={e.id} src={x} alt="" onClick={deletElement} />
           </>
         ) : !input.id ? (

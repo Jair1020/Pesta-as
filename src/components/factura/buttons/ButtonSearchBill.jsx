@@ -8,7 +8,7 @@ export default function ButtonSearchBill({handlerSearchBill}) {
   function handleInputChange(e) {
     e.preventDefault();
     let num= parseInt (e.target.value)
-    if (num && num>0 && num<1000000 ){
+    if (num && num>0 && e.target.value.length<20 ){
       setName(e.target.value);
     }else setName('')
   }
@@ -30,8 +30,7 @@ export default function ButtonSearchBill({handlerSearchBill}) {
         onKeyPress ={onkeypress}
         className={s.input}
         value={id}
-        type="number"
-        placeholder="Buscar numero de factura"
+        placeholder="Ingresar doc del cliente "
         onChange={(e) => handleInputChange(e)}
       />
       <button

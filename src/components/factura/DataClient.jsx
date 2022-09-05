@@ -9,24 +9,30 @@ export default function DataClient({
   setClient,
   saveBill,
   screenShot,
+  setInfoClient
 }) {
   const onHandlerChange = (e) => {
     setClient({ ...client, [e.target.name]: e.target.value });
   };
   const onHandlerClick = async () => {
     let clientFound = await ipcRenderer.invoke("GET_ONE_CLIENT", client.id);
-    clientFound
-      ? setClient(clientFound)
-      : Toast.fire({
-          icon: "info",
-          title: "No se encontro cliente",
-        });
+    if (clientFound) {
+      setClient(clientFound);
+      let infoClient= await ipcRenderer.invoke('GET_LAST_BILL_CLIENT', client.id);
+      setInfoClient (infoClient)
+
+    } else {
+      Toast.fire({
+        icon: "info",
+        title: "No se encontro cliente",
+      });
+    }
   };
   const onkeypress = (e) => {
-    if (e.key==='Enter'){
+    if (e.key === "Enter") {
       document.querySelector("#searchClient").click();
     }
-  }
+  };
 
   return (
     <div className={S.contClient}>
@@ -63,7 +69,7 @@ export default function DataClient({
             name="id"
           />
           <img
-          id="searchClient"
+            id="searchClient"
             style={saveBill ? { display: "none" } : { cursor: "pointer" }}
             onClick={!saveBill ? onHandlerClick : () => {}}
             className={S.search}

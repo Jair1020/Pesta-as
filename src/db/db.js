@@ -4,7 +4,7 @@ const path = require("path");
 
 
 const sequelize = new Sequelize({
-  dialect:'sqlite',
+  dialect: 'sqlite',
   storage: 'path/to/database.sqlite',
   logging: false,
   query: { raw: true }
@@ -35,7 +35,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Product, Category, Service, Bill, Client, ServiceDone, Stylist, Product_Bill, Password } = sequelize.models;
+const { Product, Category, Service, Bill, Client, ServiceDone, Stylist, Product_Bill, Stylist_Category } = sequelize.models;
 
 Category.hasMany(Product);
 Product.belongsTo(Category);
@@ -57,6 +57,11 @@ ServiceDone.belongsTo(Stylist);
 
 Bill.hasMany(ServiceDone);
 ServiceDone.belongsTo(Bill);
+
+Stylist.belongsToMany(Category, { through: Stylist_Category })
+Category.belongsToMany(Stylist, { through: Stylist_Category })
+
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

@@ -1,0 +1,95 @@
+.container{
+  position:fixed;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  transition: all 500ms ease;
+  opacity: 0;
+  visibility:hidden;
+  z-index: 10;
+}
+.cont{
+  width: 100%;
+  height: 100%;
+  max-width: 250px;
+  background: #1c1c1c;
+  position: relative;
+  transition: all 500ms ease;
+  transform: translateX(-100%);
+  overflow-y: overlay;
+}
+.cont::-webkit-scrollbar {
+  height: 1px;
+  width: 8px;
+  border-radius: 0.5rem;
+}
+
+.cont::-webkit-scrollbar-thumb {
+  background-color: #ef4a4b;
+  border-radius: 0.5rem;
+}
+
+.cont::-webkit-scrollbar-track {
+  border-radius: 0.5rem;
+  background-color: #f9c8c8;
+}
+
+
+.cont nav div{
+  border-top: 2px solid #ef4a4b;
+
+}
+
+.cont nav span {
+  display: block;
+  color: #c7c7c7;
+  padding-block: 4px;
+  padding-left: 5px;
+  border-left: 5px solid transparent;
+  transition: all 400ms ease;
+  font-size: small;
+  
+}
+.name {
+  font-weight: bold;
+  font-size: larger !important;
+}
+
+.btnMenu{
+  display: none;
+}
+.btnMenu:checked ~ .container{
+  opacity: 1;
+  visibility: visible;
+}
+
+.btnMenu:checked ~ .container .cont {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.label {
+  position:fixed;
+  left:0;
+  top:100px;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 500ms ease;
+  padding: 0;
+  margin: 0;
+}
+.btnMenu:checked ~ .label {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(250px);
+}
+.label img {
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  margin-left: -4px;
+  width: 20px;
+}

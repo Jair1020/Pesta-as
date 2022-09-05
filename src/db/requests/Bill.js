@@ -2,6 +2,8 @@ const { Bill, ServiceDone, Service, Client, Product, Stylist } = require("../db"
 
 const createBill = async (bill) => {
   try {
+    const lastbills = await Bill.findOne()
+    if (!lastbills) bill.id = 10000
     const newBill = await Bill.create(bill
     )
     await newBill.setClient(bill.id_client)
@@ -10,7 +12,7 @@ const createBill = async (bill) => {
 
   } catch (err) {
     console.log(err)
-    return 'Ocurrio un error al crear la factura'
+    throw new Error('Ocurrio un error al crear la factura')
   }
 }
 
@@ -89,7 +91,7 @@ const getBillsProcess = async () => {
 
   } catch (err) {
     console.log(err)
-    return 'Ocurrio un error al obtener las facturas en proceso'
+    throw new Error('Ocurrio un error al obtener las facturas en proceso')
   }
 
 }
@@ -105,7 +107,7 @@ const updateBill = async (bill) => {
 
   } catch (err) {
     console.log(err)
-    return 'Ocurrio un error al guardar la factura'
+    throw new Error('Ocurrio un error al guardar la factura')
   }
 }
 
@@ -123,7 +125,7 @@ const getOneBill = async (id) => {
       }
       ]
     })
-    if (!billFound)return null
+    if (!billFound) return null
     let billFoundTOLook = JSON.parse(JSON.stringify(billFound))
     let bill = {
       id: billFoundTOLook.id,
@@ -172,16 +174,11 @@ const getOneBill = async (id) => {
     })
     let service = [...servicess, ...products].sort((a, b) => a.num_order - b.num_order)
 
-
-
-
-
-
     return { bill, client, service }
 
   } catch (err) {
     console.log(err)
-    return (err)
+    throw new Error('Error al Obtener la Factura')
   }
 }
 

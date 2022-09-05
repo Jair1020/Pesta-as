@@ -58,7 +58,7 @@ export default function Count({
     <div style={modal?{pointerEvents:'none'}:{}} className={S.ContTotals}>
       <div className={S.ContTotalsLeft}>
         <span className={S.obs}>Observaciones:</span>
-        <textarea
+        {!screenShot?<textarea
           disabled={
             !saveBill ||
             bill.status === "rechazada" ||
@@ -69,7 +69,7 @@ export default function Count({
           className={S.obsImp}
           value={bill.observations ? bill.observations : ""}
           type="text"
-        />
+        />:null}
         <span className={S.frase}>
           {" "}
           !Gracias por tu compra, vuelve Pronto!{" "}

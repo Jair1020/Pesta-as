@@ -1,0 +1,13 @@
+.table th {
+  background-color: blueviolet;
+  padding-block: 4px;
+  padding-inline: 5px;
+  height: 20px;  
+}
+.table td{
+  
+  height: 20px;  
+  background-color:cadetblue;
+  padding-block: 2px;
+  padding-inline: 5px;
+}

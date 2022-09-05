@@ -15,9 +15,11 @@ import Swal from "sweetalert2";
 import { screenshot } from "../../helpers/screenshot";
 import ButtonDeleteBill from "./buttons/ButtonDeleteBill";
 import ButtonSearchBill from "./buttons/ButtonSearchBill";
+import LastServices from "./lastService/LastServices";
 const ipcRenderer = window.ipcRenderer;
 
 export default function Factura() {
+  const [infoClient, setInfoClient] = useState([]);
   const [billProcess, setBillProcess] = useState([]);
   const [client, setClient] = useState({});
   const [services, setServices] = useState([{}, {}, {}, {}]);
@@ -205,9 +207,7 @@ export default function Factura() {
           );
           setScreenShot((e) => !e);
           setTimeout(() => {
-            let name = `${bill.id}-${new Date(
-              Date.now()
-            ).toLocaleDateString()}`;
+            let name = `${bill.id}-${client.name_client}`;
             screenshot(name);
             onHandlerBillProcess({ target: { id: "" } });
             setScreenShot((e) => !e);
@@ -238,47 +238,58 @@ export default function Factura() {
 
   const deleteBill = async () => {
     await billSave({});
+    let flag = false;
     const { value: text } = await Swal.fire({
       input: "textarea",
       inputLabel:
         "Porfavor Especifica la razón por la que se rechaza la factura:",
       inputPlaceholder: "Comentarios...",
-      inputAttributes: {
-        "aria-label":
-          "Porfavor Especifica la razón por la que se rechaza la factura. ",
-      },
       color: "Black",
       showCancelButton: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        flag = true;
+      }
     });
-    let obs = "";
-    if (text) {
-      obs = bill.observations
+    if (flag || text) {
+      let obs = bill.observations
         ? `${bill.observations}\nRechazada por:\n${text}`
         : `Rechazada por:\n${text}`;
+      await billSave({ status: "rechazada", obs: obs });
+      Swal.fire(
+        "rechazada!",
+        "La factura queda en estado rechazada.",
+        "success"
+      );
     }
-    await billSave({ status: "rechazada", obs: obs });
-    Swal.fire("rechazada!", "La factura queda en estado rechazada.", "success");
   };
+
   const handlerSearchBill = async (id) => {
-    let billFound = await ipcRenderer.invoke("GET_ONE_BILL", id);
-    if (billFound) {
-      setBill((e) => billFound.bill);
+    let infoClient = await ipcRenderer.invoke("GET_LAST_BILL_CLIENT", id);
+    if (infoClient) {
+      setInfoClient(infoClient);
+      Toast.fire({
+        icon: "success",
+        title: "Revisa menu lateral para ver la información",
+      });
+      /*       setBill((e) => billFound.bill);
       setServices((e) => billFound.service);
-      setClient((e) => billFound.client);
-      setSaveBill(true);
-      setTimeout(() => {
-        setBillUpdated(true);
-      }, 400);
+      setClient((e) => billFound.client); */
+      // setSaveBill(true);
+      // setTimeout(() => {
+      //   setBillUpdated(true);
+      // }, 400);
     } else {
       Toast.fire({
         icon: "warning",
-        title: "No se encontro la factura",
+        title: "No se encontro el cliente",
       });
     }
   };
 
   return (
     <div className={S.maincont}>
+      <LastServices infoClient={infoClient} />
       <ButtonSearchBill handlerSearchBill={handlerSearchBill} />
       <div id="factura" className={screenShot ? S.contScreen : S.cont}>
         <div className={S.dropBillProcess}>
@@ -307,6 +318,7 @@ export default function Factura() {
           setClient={setClient}
           saveBill={saveBill}
           screenShot={screenShot}
+          setInfoClient={setInfoClient}
         />
         <HeaderTabla />
         <Row

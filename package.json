@@ -13,6 +13,7 @@
     "jspdf": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-html-table-to-excel": "^2.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "sequelize": "^6.21.4",

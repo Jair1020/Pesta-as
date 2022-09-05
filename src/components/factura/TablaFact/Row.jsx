@@ -159,7 +159,6 @@ export default function Row({
     });
     return flag;
   });
-  console.log (services)
   return services.map((e, idx) => (
     <div
       key={idx}

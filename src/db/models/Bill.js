@@ -15,8 +15,8 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       status: {
-        type: DataTypes.ENUM("aprobada", "proceso", "pendiente", "rechazada"),
-        defaultValue:'proceso'
+        type: DataTypes.ENUM("aprobada", "proceso", "pendiente", "rechazada", 'initial'),
+        defaultValue: 'proceso'
       },
       observations: {
         type: DataTypes.TEXT,
@@ -42,8 +42,8 @@ module.exports = (sequelize) => {
       }
     },
     {
-      initialAutoincrement:10000,
       timestamps: false,
     }
   );
 };
+

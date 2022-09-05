@@ -13,7 +13,6 @@ const {Service,Category} = require ('../db.js')
         attributes: ['name_category','id']
       }],
     })
-    console.log (services)
     return services
   }catch (err){
     console.log (err)
