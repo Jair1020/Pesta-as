@@ -215,12 +215,10 @@ export default function Factura() {
         }
       });
     } else {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Factura aprobada",
-        showConfirmButton: false,
-        timer: 1500,
+      Toast.fire({
+        icon: 'success',
+        title: "Aprobada",
+        width:'250px'  ,
       });
       let obs = bill.observations
         ? `${bill.observations}\nAPROBADA`
@@ -228,7 +226,7 @@ export default function Factura() {
       await billSave({ status: "aprobada", obs: obs });
       setScreenShot((e) => !e);
       setTimeout(() => {
-        let name = `${bill.id}-${new Date(Date.now()).toLocaleDateString()}`;
+        let name = `${bill.id}-${client.name_client.split(" ").slice(0, 3).join(" ")}`;
         screenshot(name);
         onHandlerBillProcess({ target: { id: "" } });
         setScreenShot((e) => !e);

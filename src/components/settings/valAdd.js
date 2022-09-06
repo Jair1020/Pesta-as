@@ -2,7 +2,7 @@ export const valAdd = ({ input, idxseccion }) => {
   let error = {}
   if (!Object.keys(input).length) {
     error.all = "Ingresar datos"
-  } 
+  }
   if (idxseccion === 0) {
     if (!input.id || !input.id.trim()) {
       error.id = "Ingresar Documento del esteticista"

@@ -90,7 +90,7 @@ const loadServices = async () => {
   try {
     await Promise.all(services.map(async (se) => {
       var categoryy = await Category.findAll({
-        where: { name_category: se.category[0].toLowerCase() },
+        where: { name_category: se.category[0]/* .toLowerCase()  */},
       })
 
       categoryy = categoryy.flat();
@@ -111,7 +111,7 @@ const loadProducts = async () => {
   await Promise.all(products?.map(async (p) => {
 
     var categoryy = await Category.findAll({
-      where: { name_category: p.category[0].toLowerCase() },
+      where: { name_category: p.category[0] },
     })
     categoryy = categoryy.flat();
 
@@ -228,5 +228,4 @@ module.exports = {
   createPassword,
   loadDates,
   loadFirtsBill,
-  updatePercentage
 } 

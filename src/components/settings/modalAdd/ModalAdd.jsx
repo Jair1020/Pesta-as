@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import DropDownSetting from "../dropDownSetting/DropDownSetting";
 import S from "./modalAdd.module.css";
-
+import percentageimg from '../../../assets/Img/percentage.png'
+import ModalPercentages from "../cards/modalPercentages/ModalPercentages";
 export default function ModalAdd({ idxseccion, categories, setModal, create }) {
   const [input, setInput] = useState({});
+  const [percentages, setPercentages] = useState ([...categories].map (e=>{
+    return {name_category:e.name_category, categoryId:e.id }
+  }))
+  const [changeModal, setChangeModal] = useState (false)
   const keys =
     idxseccion === 0
       ? {
@@ -33,15 +38,16 @@ export default function ModalAdd({ idxseccion, categories, setModal, create }) {
       if (typeof num !== "number" || num < 0 || num > 100000000) return;
       setInput((i) => ({ ...i, price: num }));
     } else {
-      setInput((i) => ({ ...i, [e.target.name]: [e.target.value] }));
+      setInput((i) => ({ ...i, [e.target.name]:e.target.value }));
     }
   };
 
-  return (
+  return !changeModal?(
     <>
       <div className={S.contMainModal}>
         <div className={S.contModal}>
           <div className={S.maincont}>
+          {!idxseccion?<img /* id={e.id} name={e[keys.name]} */ src={percentageimg} onClick={()=>setChangeModal(true)} alt="" />:null}
             <div>
               <label>Nombre:</label>
               <input
@@ -105,7 +111,7 @@ export default function ModalAdd({ idxseccion, categories, setModal, create }) {
               )}
             </div>
             <div className={S.buttons}>
-              <button onClick={() => create(input)}>Guardar</button>
+              <button onClick={() => create({input, percentages})}>Guardar</button>
               <button onClick={() => setModal(false)}>Cancelar</button>
             </div>
           </div>
@@ -113,5 +119,5 @@ export default function ModalAdd({ idxseccion, categories, setModal, create }) {
       </div>
       <div className={S.modalBack}></div>
     </>
-  );
+  ):<ModalPercentages setModal={setChangeModal} percentages={percentages} setPercentages={setPercentages}/>;
 }

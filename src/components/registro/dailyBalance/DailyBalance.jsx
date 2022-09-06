@@ -2,12 +2,16 @@ import React from "react";
 import S from "./dailyBalance.module.css";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
-export default function DailyBalance() {
+export default function DailyBalance({
+  valUnitarios,
+  dailyServices,
+  stylist_gain,
+}) {
   return (
     <>
       <ReactHTMLTableToExcel
         id="DescargarReporte"
-        className=""
+        className={S.exportExcel}
         table="tableReport"
         filename="Reporte-01/05/2022"
         sheet="Reporte"
@@ -18,50 +22,63 @@ export default function DailyBalance() {
         <tbody>
           <tr>
             <th>Cliente</th>
+            <th>Servicio</th>
             <th>Precio</th>
-            <th>Efectivo</th>
-            <th>Bancolombia</th>
-            <th>Davivienda</th>
-            <th>tarjeta</th>
             <th>Esteticista</th>
             <th>Ganancia Esteticista</th>
           </tr>
+
+          {dailyServices.map((e, idx) => (
+            <tr key={idx} >
+              <td>{e.name_client}</td>
+              <td>{e.name_service?e.name_service:e.name_product}</td>
+              <td>{"$" + new Intl.NumberFormat("de-DE").format(e.price)}</td>
+              <td>
+                {e.name_stylist
+                  ? e.name_stylist.split(" ").slice(0, 3).join(" ")
+                  : "------"}
+              </td>
+              <td>
+                {"$" +
+                  new Intl.NumberFormat("de-DE").format(
+                    e.price * ((e.percentage?e.percentage:0) / 100)
+                  )}
+              </td>
+            </tr>
+          ))}
           <tr>
-            <td>Maria Fernanda Camelo</td>
-            <td>$30.000</td>
-            <td>$30.000</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>Eclis Fernanda Romeo Guzman</td>
-            <td>50000</td>
+            <td colSpan="5"></td>
           </tr>
           <tr>
-            <td colSpan="8"></td>
-          </tr>
-          <tr>
+            <th>Efectivo</th>
+            <th>Bancolombia</th>
+            <th>Davivienda</th>
+            <th>Tarjeta</th>
             <th>Total</th>
-            <td>$779.000</td>
-            <td>$492.000</td>
-            <td>$287.000</td>
-            <td>$287.000</td>
-            <td>$287.000</td>
-            <td colSpan="2"></td>
           </tr>
           <tr>
-            <td colSpan={8}></td>
+            <td>
+              {"$" +
+                new Intl.NumberFormat("de-DE").format(valUnitarios.efectivo)}
+            </td>
+            <td>
+              {"$" + new Intl.NumberFormat("de-DE").format(valUnitarios.banc)}
+            </td>
+            <td>
+              {"$" + new Intl.NumberFormat("de-DE").format(valUnitarios.dav)}
+            </td>
+            <td>
+              {"$" + new Intl.NumberFormat("de-DE").format(valUnitarios.targe)}
+            </td>
+            <td>
+              {"$" +
+                new Intl.NumberFormat("de-DE").format(valUnitarios.price_Total)}
+            </td>
           </tr>
           <tr>
-            <th>Esteticistas</th>
-            <td colSpan={7}></td>
+            <td colSpan="5"></td>
           </tr>
-          <tr>
-            <th>Ganacias Totales</th>
-            <td colSpan={7}></td>
-          </tr>
-          <tr>
-            <td colSpan="8"></td>
-          </tr>
+
           <tr>
             <th></th>
             <th>Gastos</th>
@@ -71,11 +88,38 @@ export default function DailyBalance() {
           </tr>
           <tr>
             <td></td>
-            <td>$492.000</td>
-            <td>$287.000</td>
-            <td>$287.000</td>
-            <td>$287.000</td>
+            <td>
+              {"$" +
+                new Intl.NumberFormat("de-DE").format(valUnitarios.expensess)}
+            </td>
+            <td>
+              {"$" + new Intl.NumberFormat("de-DE").format(valUnitarios.debt)}
+            </td>
+            <td>
+              {"$" +
+                new Intl.NumberFormat("de-DE").format(
+                  valUnitarios.stylist_total
+                )}
+            </td>
+            <td>
+              {"$" +
+                new Intl.NumberFormat("de-DE").format(valUnitarios.total_neto)}
+            </td>
           </tr>
+          <tr>
+            <td colSpan="8"></td>
+          </tr>
+          <tr>
+            <th>Esteticistas</th>
+            <th>Ganacias Totales</th>
+          </tr>
+
+          {stylist_gain.map((e, idx) => (
+            <tr key={idx} >
+              <th>{e.name_stylist.split(" ").slice(0, 3).join(" ")}</th>
+              <td>{"$" + new Intl.NumberFormat("de-DE").format(e.gain)}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

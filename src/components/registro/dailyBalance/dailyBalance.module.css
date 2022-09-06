@@ -1,5 +1,5 @@
 .table th {
-  background-color: blueviolet;
+  background-color:chocolate;
   padding-block: 4px;
   padding-inline: 5px;
   height: 20px;  
@@ -10,4 +10,14 @@
   background-color:cadetblue;
   padding-block: 2px;
   padding-inline: 5px;
+}
+
+.exportExcel{
+ padding-inline: 10px;
+ padding-block: 2px; 
+ border-radius: 10px;
+ border: 1px solid black;
+ cursor: pointer;
+ background-color:#fdecec;
+ 
 }

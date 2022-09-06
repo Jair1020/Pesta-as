@@ -6,13 +6,14 @@ import editdoc from "../../../assets/Img/editdoc.png";
 import x from "../../../assets/Img/x.svg";
 import S from "./cards.module.css";
 import Swal from "sweetalert2";
-import percentage from "../../../assets/Img/percentage.png"
+import percentage from "../../../assets/Img/percentage.png";
+import ModalPercentages from "./modalPercentages/ModalPercentages";
 const ipcRenderer = window.ipcRenderer;
 
 export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
   const [input, setInput] = useState({});
-  const [modalPercentages, setModalPercentages]= useState (false)
-  const [percentages, setPercentages] = useState ([])
+  const [modalPercentages, setModalPercentages] = useState(false);
+  const [percentages, setPercentages] = useState([]);
 
   const keys =
     idxseccion === 0
@@ -79,6 +80,9 @@ export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
     let updated;
     if (idxseccion === 0) {
       updated = await ipcRenderer.invoke("UPDATE_STYLIST", input);
+      if (percentages.length){
+        updated=  await ipcRenderer.invoke("UPDATE_PERCENTAGE_STYLIST", percentages);
+      }
     } else if (idxseccion === 1) {
       updated = await ipcRenderer.invoke("UPDATE_SERVICE", input);
     } else {
@@ -131,44 +135,52 @@ export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
           let newSeccion = [...seccion].filter(
             (s) => parseInt(s.id) !== parseInt(e.target.id)
           );
-          setSeccion ([...newSeccion])
+          setSeccion([...newSeccion]);
           Toast.fire({
             icon: "success",
             title: "Elemento desactivado",
           });
-          setInput ({})
-        }else{
+          setInput({});
+        } else {
           Toast.fire({
             icon: "error",
             title: "Ocurrio un error",
           });
-          setInput ({})
+          setInput({});
         }
       }
     });
   };
-  const onHandlerPercentages = ()=>{
-    
-
-
-    setModalPercentages (true)
-  }
+  const onHandlerPercentages = async (e) => {
+    let name=  e.target.name.split (' ').slice(0,3).join (' ')  
+    let percentages = await ipcRenderer.invoke("GET_PERCENTAGE_STYLIST", e.target.id );
+    percentages = percentages.map ((e)=>{
+      let cate= categories.find(c=>c.id === e.categoryId)
+      
+      return {...e, name_category:(cate.name_category[0].toUpperCase() + cate.name_category.substring(1))}
+    })
+    setPercentages (percentages)
+    setModalPercentages(true);
+  };
   return seccion.map((e) => (
+    <>
     <div
       className={S.cont}
       key={e.id}
       style={e.id === input.id ? {} : { pointerEvents: "none" }}
-    >
+      >
       <div className={S.icons}>
         {e.id === input.id ? (
           <>
             <img src={savedisk} alt="" onClick={saveInput} />
-            {!idxseccion?<img src={percentage} onClick={onHandlerPercentages} alt=""/>:null}
+            {!idxseccion ? (
+              <img id={e.id} name={e[keys.name]} src={percentage} onClick={onHandlerPercentages} alt="" />
+            ) : null}
             <img id={e.id} src={x} alt="" onClick={deletElement} />
           </>
         ) : !input.id ? (
           <img id={e.id} onClick={elementToEdit} src={editdoc} alt="" />
-        ) : null}
+          ) : null}
       </div>
       <div>
         <label>Nombre:</label>
@@ -177,7 +189,7 @@ export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
           name={keys.name}
           type="text"
           value={e[keys.name]}
-        />
+          />
       </div>
       <div>
         <label>{idxseccion ? "Precio:" : "Email:"}</label>
@@ -186,37 +198,43 @@ export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
           name={keys.price ? keys.price : keys.email}
           value={
             keys.price
-              ? new Intl.NumberFormat("de-DE").format(e[keys.price])
-              : e[keys.email]
+            ? new Intl.NumberFormat("de-DE").format(e[keys.price])
+            : e[keys.email]
           }
           type="text"
-        />
+          />
       </div>
       <div
         style={
           idxseccion
-            ? { flexDirection: "row", alignItems: "center", gap: "10px" }
-            : {}
+          ? { flexDirection: "row", alignItems: "center", gap: "10px" }
+          : {}
         }
-      >
+        >
         <label>{idxseccion ? "Categoria:" : "Telefono:"}</label>
         {idxseccion ? (
           <DropDownSetting
-            onHandlerOption={onHandlerCategory}
-            options={[...categories].filter(
-              (c) => c.name_category !== e["category.name_category"]
+          onHandlerOption={onHandlerCategory}
+          options={[...categories].filter(
+            (c) => c.name_category !== e["category.name_category"]
             )}
             category={e["category.name_category"]}
-          />
-        ) : (
-          <input
-            onChange={onHandlerInput}
-            name={keys.phone}
-            value={e[keys.phone]}
-            type="text"
-          />
-        )}
+            />
+            ) : (
+              <input
+              onChange={onHandlerInput}
+              name={keys.phone}
+              value={e[keys.phone]}
+              type="text"
+              />
+              )}
       </div>
     </div>
+      {modalPercentages && <ModalPercentages
+        setModal={setModalPercentages}
+        percentages={percentages}
+        setPercentages={setPercentages}
+        />}
+        </>
   ));
 }

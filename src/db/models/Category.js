@@ -9,10 +9,10 @@ module.exports = (sequelize) => {
       name_category: {
         type: DataTypes.STRING,
         allowNull: false,
-         set(value) {
+         /* set(value) {
            let name = value.toLowerCase();
           this.setDataValue("name_category", name);
-         },
+         }, */
       },
       disabled: {
         type: DataTypes.BOOLEAN,

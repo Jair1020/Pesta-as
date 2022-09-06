@@ -172,8 +172,8 @@ const getOneBill = async (id) => {
         name: e.name_product,
       }
     })
-    let service = [...servicess, ...products].sort((a, b) => a.num_order - b.num_order)
-
+    let service = [...servicess, ...products]/* .sort((a, b) => a.num_order - b.num_order)
+ */
     return { bill, client, service }
 
   } catch (err) {

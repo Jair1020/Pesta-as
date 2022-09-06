@@ -5,6 +5,7 @@ import eye from "../../../assets/Img/eye.png";
 export default function RowRegistro({ dailyServices, seeBill }) {
   return dailyServices?.map((e, idx) => (
     <div
+      key={idx}
       style={
         idx % 2 === 0
           ? { backgroundColor: "#fbdada" }

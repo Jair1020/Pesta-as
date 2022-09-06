@@ -17,11 +17,14 @@ export default function Registro() {
   })
   const [modalReport, setModalReport] = useState (false)
   const [modalExpense, setModalExpense] = useState (false)
-  
+  const [expenses, setExpenses] = useState ([])
   useEffect (()=>{
     const getDailyServices = async ()=>{
       let dailyService= await ipcRenderer.invoke("GET_DAILY_SERVICES");
+
+      let expenses = await ipcRenderer.invoke ('GET_EXPENSE_DAILY')
       setDailyServices (dailyService)
+      setExpenses (expenses)
     }
     getDailyServices ()
   },[])
@@ -46,7 +49,7 @@ export default function Registro() {
       <img className={S.inconExpense} src={expense} alt="" onClick={()=>setModalExpense(true)}/>
       <img className={S.inconReport} src={report} onClick={()=>setModalReport(true)} />
       {modalExpense && <ModalExpense setModalExpense={setModalExpense}/>}
-      {modalReport && <ReportModal setModalReport={setModalReport}/>}
+      {modalReport && <ReportModal expenses={expenses} dailyServices={dailyServices} setModalReport={setModalReport}/>}
     </div>
   );
 }

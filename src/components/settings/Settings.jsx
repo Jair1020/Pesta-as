@@ -36,14 +36,12 @@ export default function Settings() {
         products.sort((a, b) => a.name_product.localeCompare(b.name_product))
       );
     }
-    if (idx === 2 || idx === 1) {
-      let categor = await ipcRenderer.invoke("GET_CATEGORIES");
-      setCategories(
-        categor.sort((a, b) => a.name_category.localeCompare(b.name_category))
-      );
-    }
+    let categor = await ipcRenderer.invoke("GET_CATEGORIES");
+    setCategories(
+      categor.sort((a, b) => a.name_category.localeCompare(b.name_category))
+    );
   };
-  const create = async (input) => {
+  const create = async ({input, percentages}) => {
     let err = valAdd({ input: input, idxseccion: idxseccion });
     if (Object.keys(err).length) {
       Toast.fire({
@@ -51,20 +49,31 @@ export default function Settings() {
         title: Object.values(err)[0],
       });
     } else {
-      let updated;
+      let created;
       if (idxseccion === 0) {
-        updated = await ipcRenderer.invoke("ADD_STYLIST", input);
+        let per = [...percentages].map (e=>{
+          return {...e, stylistId:input.id}
+        })
+        created = await ipcRenderer.invoke("ADD_STYLIST", {stylist:input, percentages:per });
       } else if (idxseccion === 1) {
-        updated = await ipcRenderer.invoke("ADD_SERVICE", input);
+        created = await ipcRenderer.invoke("ADD_SERVICE", input);
       } else {
-        updated = await ipcRenderer.invoke("ADD_PRODUCT", input);
+        created = await ipcRenderer.invoke("ADD_PRODUCT", input);
       }
-      if (updated === true) {
+      if (created === true) {
         Toast.fire({
           icon: "success",
           title: "Creado",
           width: "210px",
         });
+        setModalAdd (false)
+      }else{
+        Toast.fire({
+          icon: "error",
+          title: "Ocurrio un error al crear el esteticista",
+          width: "210px",
+        });
+        setModalAdd (false)
       }
     }
   };

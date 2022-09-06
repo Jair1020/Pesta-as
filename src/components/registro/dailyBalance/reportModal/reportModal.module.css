@@ -12,9 +12,9 @@
 
 .contMainModal{
   position: fixed;
-  display: flex;
+/*   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
   overflow-x: hidden;
   overflow-y:auto;
   padding-top:0;

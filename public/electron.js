@@ -4,7 +4,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const { conn } = require('../src/db/db.js');
 
 const { getServices, updateService, createService } = require('../src/db/requests/Services');
-const { getStylists, updateStylist, createStylist } = require('../src/db/requests/Stylist');
+const { getStylists, updateStylist, createStylist, getPercentages, updatePercentage } = require('../src/db/requests/Stylist');
 const { createClient, getOneClient, getBillsClient } = require('../src/db/requests/Client');
 const { createBill, getBillsProcess, updateBill, getOneBill } = require('../src/db/requests/Bill');
 const { getProducts, updateProduct, createProduct } = require('../src/db/requests/Products');
@@ -17,17 +17,16 @@ const {
   verifyDb,
   createPassword,
   loadDates,
-  updatePercentage, 
-  } = require('../src/db/datamockDb.js')
+} = require('../src/db/datamockDb.js')
 
 const isDev = require('electron-is-dev');
 const { verifyPassword } = require('../src/db/requests/Password.js');
 const { getCategories } = require('../src/db/requests/Categories.js');
-const { createExpense } = require('../src/db/requests/Expense.js');
+const { createExpense, getExpenseDaily } = require('../src/db/requests/Expense.js');
 
 
 
-conn.sync({force:true}).then(async () => {
+conn.sync({ force: true }).then(async () => {
   try {
     const verify = await verifyDb()
     if (!verify.length) {
@@ -37,8 +36,6 @@ conn.sync({force:true}).then(async () => {
       await loadServices();
       await loadStylist();
       await createPassword('a')
-      await updatePercentage ()  
-      // await loadDates ()
     }
   } catch (err) {
     console.log(err)
@@ -163,7 +160,7 @@ ipcMain.handle('GET_DAILY_SERVICES', async (event, arg) => {
 
 ipcMain.handle('UPDATE_PRODUCT', async (event, arg) => {
   try {
-    let updatedProduct = await updateProduct (arg)
+    let updatedProduct = await updateProduct(arg)
     return updatedProduct
   } catch (err) {
     console.error(err)
@@ -172,7 +169,7 @@ ipcMain.handle('UPDATE_PRODUCT', async (event, arg) => {
 })
 ipcMain.handle('UPDATE_SERVICE', async (event, arg) => {
   try {
-    let updatedService = await updateService (arg)
+    let updatedService = await updateService(arg)
     return updatedService
   } catch (err) {
     console.error(err)
@@ -181,7 +178,7 @@ ipcMain.handle('UPDATE_SERVICE', async (event, arg) => {
 })
 ipcMain.handle('UPDATE_STYLIST', async (event, arg) => {
   try {
-    let updatedStylist = await updateStylist (arg)
+    let updatedStylist = await updateStylist(arg)
     return updatedStylist
   } catch (err) {
     console.error(err)
@@ -192,7 +189,7 @@ ipcMain.handle('UPDATE_STYLIST', async (event, arg) => {
 
 ipcMain.handle('ADD_PRODUCT', async (event, arg) => {
   try {
-    let newProduct = await createProduct (arg)
+    let newProduct = await createProduct(arg)
     return newProduct
   } catch (err) {
     console.error(err)
@@ -201,7 +198,7 @@ ipcMain.handle('ADD_PRODUCT', async (event, arg) => {
 })
 ipcMain.handle('ADD_SERVICE', async (event, arg) => {
   try {
-    let newService = await createService (arg)
+    let newService = await createService(arg)
     return newService
   } catch (err) {
     console.error(err)
@@ -210,7 +207,7 @@ ipcMain.handle('ADD_SERVICE', async (event, arg) => {
 })
 ipcMain.handle('ADD_STYLIST', async (event, arg) => {
   try {
-    let newStylist = await createStylist (arg)
+    let newStylist = await createStylist(arg)
     return newStylist
   } catch (err) {
     console.error(err)
@@ -218,26 +215,50 @@ ipcMain.handle('ADD_STYLIST', async (event, arg) => {
   }
 })
 
-ipcMain.handle ('GET_LAST_BILL_CLIENT', async (event, arg)=>{
-  try{
-    let Bills= await getBillsClient (arg)
+ipcMain.handle('GET_LAST_BILL_CLIENT', async (event, arg) => {
+  try {
+    let Bills = await getBillsClient(arg)
     return Bills
-  }catch (err){
+  } catch (err) {
     return err
   }
 })
 
-ipcMain.handle ('CREATE_EXPENSE', async (event,arg)=>{
-  try{
-    let newExpense = await createExpense (arg)
+ipcMain.handle('CREATE_EXPENSE', async (event, arg) => {
+  try {
+    let newExpense = await createExpense(arg)
     return (newExpense)
+  } catch (err) {
+    return err
+  }
+})
+
+ipcMain.handle('GET_PERCENTAGE_STYLIST', async (event, arg) => {
+  try {
+    let percentages = await getPercentages(arg)
+    return percentages
+  } catch (err) {
+    return err
+  }
+})
+
+ipcMain.handle ('UPDATE_PERCENTAGE_STYLIST', async (event, arg)=>{
+  try{
+    let update = await updatePercentage (arg)
+    return update
   }catch (err){
     return err
   }
-
 })
 
-
+ipcMain.handle ('GET_EXPENSE_DAILY', async (event,arg)=>{
+  try{
+    let expenses = await getExpenseDaily ()
+    return expenses
+  }catch (err){
+    return err
+  }
+})
 //----------------------------------------------//
 
 

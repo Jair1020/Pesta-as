@@ -20,8 +20,8 @@ export default function ({infoClient}) {
           </div>
           <nav>
             <span className={S.name} >{infoClient.length?infoClient[0].name_client:'El cliente no tiene servicios'}</span>
-           {infoClient.map(e=>(
-              <div>
+           {infoClient.map((e,idx)=>(
+              <div key={idx} >
               <span>{e.date}</span>
               <span>{e.name_service}</span>
               <span>{e.name_stylist}</span>

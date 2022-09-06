@@ -102,7 +102,6 @@ export default function Row({
         price: price,
         num_order: e.target.id,
       };
-      console.log(service);
       
     } else if (e.target.name === "sale") {
       let sale =
