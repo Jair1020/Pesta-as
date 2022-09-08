@@ -1,5 +1,6 @@
 /* -------MainCont------------- */
 .maincont {
+  position: block;
   display: flex;
   flex-direction: column-reverse;
   justify-content: center;
@@ -129,6 +130,9 @@
 
 .leftClient {
   width: 50%;
+}
+.inputName{
+  width: 100%;
 }
 
 .contClient div input {
@@ -447,6 +451,7 @@
   border-radius: 10px;
   margin-block: 5px;
   resize: none;
+  padding-left:10px ;
 }
 .obs{
   font-size: small;

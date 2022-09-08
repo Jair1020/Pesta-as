@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
         autoIncrement: true,
       },
       expense_reason: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       expense_date: {

@@ -18,14 +18,22 @@ export default function Registro() {
   const [modalReport, setModalReport] = useState (false)
   const [modalExpense, setModalExpense] = useState (false)
   const [expenses, setExpenses] = useState ([])
+  const [changes, setChanges] = useState ([])
+
+
+  const  dailyEspense= async ()=>{
+    let expenses = await ipcRenderer.invoke ('GET_EXPENSE_DAILY')  
+    setExpenses (expenses)
+  }
+
   useEffect (()=>{
     const getDailyServices = async ()=>{
       let dailyService= await ipcRenderer.invoke("GET_DAILY_SERVICES");
-
-      let expenses = await ipcRenderer.invoke ('GET_EXPENSE_DAILY')
+      let changes= await ipcRenderer.invoke("GET_BILL_CHANGE")
+      setChanges (changes)
       setDailyServices (dailyService)
-      setExpenses (expenses)
     }
+    dailyEspense ()
     getDailyServices ()
   },[])
   const seeBill= async (idBill)=>{
@@ -40,6 +48,10 @@ export default function Registro() {
       setModal (bill)
     }
   }
+  const onHadlerRerpot = async ()=>{
+    await dailyEspense ()
+    setModalReport(true)
+  }
 
   return (
     <div className={S.contRegistro}>
@@ -47,9 +59,9 @@ export default function Registro() {
       <RowRegistro dailyServices={dailyServices} seeBill={seeBill} />
       {modal.state && <ModalBill client={modal.client} bill={modal.bill} services={modal.services} setModal={setModal} />}
       <img className={S.inconExpense} src={expense} alt="" onClick={()=>setModalExpense(true)}/>
-      <img className={S.inconReport} src={report} onClick={()=>setModalReport(true)} />
+      <img className={S.inconReport} src={report} onClick={onHadlerRerpot} alt='' />
       {modalExpense && <ModalExpense setModalExpense={setModalExpense}/>}
-      {modalReport && <ReportModal expenses={expenses} dailyServices={dailyServices} setModalReport={setModalReport}/>}
+      {modalReport && <ReportModal expenses={expenses} dailyServices={dailyServices} setModalReport={setModalReport} changes={changes} />}
     </div>
   );
 }

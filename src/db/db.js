@@ -35,7 +35,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Product, Category, Service, Bill, Client, ServiceDone, Stylist, Product_Bill, Stylist_Category } = sequelize.models;
+const { Product, Category, Service, Bill, Client, ServiceDone, Stylist, Product_Bill, Stylist_Category, BillChange } = sequelize.models;
 
 Category.hasMany(Product);
 Product.belongsTo(Category);
@@ -61,6 +61,8 @@ ServiceDone.belongsTo(Bill);
 Stylist.belongsToMany(Category, { through: Stylist_Category })
 Category.belongsToMany(Stylist, { through: Stylist_Category })
 
+BillChange.belongsTo (Bill);
+Bill.hasMany(BillChange);
 
 
 module.exports = {

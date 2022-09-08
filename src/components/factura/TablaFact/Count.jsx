@@ -9,7 +9,8 @@ export default function Count({
   services,
   saveBill,
   screenShot,
-  modal
+  modal,
+  changeBill
 }) {
   useEffect(() => {
     let t = services.reduce((acc, e) => {
@@ -59,11 +60,11 @@ export default function Count({
       <div className={S.ContTotalsLeft}>
         <span className={S.obs}>Observaciones:</span>
         {!screenShot?<textarea
-          disabled={
-            !saveBill ||
+          disabled={ !changeBill &&
+            (!saveBill ||
             bill.status === "rechazada" ||
             bill.status === "aprobada" ||
-            bill.status === "pendiente"
+            bill.status === "pendiente")
           }
           onChange={onHandlerObs}
           className={S.obsImp}
@@ -98,10 +99,10 @@ export default function Count({
           </span>
           <input
             style={screenShot ? { height: "20px" } : {}}
-            disabled={
-              !saveBill ||
+            disabled={!changeBill &&
+              (!saveBill ||
               bill.status === "rechazada" ||
-              bill.status === "aprobada"
+              bill.status === "aprobada")
             }
             name="catch"
             value={
@@ -111,10 +112,10 @@ export default function Count({
           />
           <input
             style={screenShot ? { height: "20px" } : {}}
-            disabled={
-              !saveBill ||
+            disabled={!changeBill &&
+              (!saveBill ||
               bill.status === "rechazada" ||
-              bill.status === "aprobada"
+              bill.status === "aprobada")
             }
             name="transferBanc"
             value={
@@ -126,10 +127,10 @@ export default function Count({
           />
           <input
             style={screenShot ? { height: "20px" } : {}}
-            disabled={
-              !saveBill ||
+            disabled={!changeBill &&
+              (!saveBill ||
               bill.status === "rechazada" ||
-              bill.status === "aprobada"
+              bill.status === "aprobada")
             }
             name="transferDav"
             value={
@@ -141,10 +142,10 @@ export default function Count({
           />
           <input
             style={screenShot ? { height: "20px" } : {}}
-            disabled={
-              !saveBill ||
+            disabled={!changeBill &&
+              (!saveBill ||
               bill.status === "rechazada" ||
-              bill.status === "aprobada"
+              bill.status === "aprobada")
             }
             name="card"
             value={

@@ -3,14 +3,21 @@ import s from './buttons.module.css'
 
 
 export default function ButtonSearchBill({handlerSearchBill}) {
-  const [id, setName] = useState("");
+  const [id, SetId] = useState("");
 
   function handleInputChange(e) {
     e.preventDefault();
     let num= parseInt (e.target.value)
-    if (num && num>0 && e.target.value.length<20 ){
-      setName(e.target.value);
-    }else setName('')
+    if (  !isNaN(num)  && typeof num ==='number'){
+      if (num>0 && e.target.value.length<20 ){
+        SetId(num);
+      }else SetId('')
+    }else{
+      if (e.target.value.length<50 ){
+        SetId(e.target.value);
+      }else SetId('')
+    }
+
   }
 
   const handleSubmit = async (e) => {

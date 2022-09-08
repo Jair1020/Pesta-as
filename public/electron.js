@@ -5,7 +5,7 @@ const { conn } = require('../src/db/db.js');
 
 const { getServices, updateService, createService } = require('../src/db/requests/Services');
 const { getStylists, updateStylist, createStylist, getPercentages, updatePercentage } = require('../src/db/requests/Stylist');
-const { createClient, getOneClient, getBillsClient } = require('../src/db/requests/Client');
+const { createClient, getOneClient, getBillsClient, updateObs, searchName } = require('../src/db/requests/Client');
 const { createBill, getBillsProcess, updateBill, getOneBill } = require('../src/db/requests/Bill');
 const { getProducts, updateProduct, createProduct } = require('../src/db/requests/Products');
 const { createServiceDone, getDailyServices } = require('../src/db/requests/ServiceDone');
@@ -23,10 +23,11 @@ const isDev = require('electron-is-dev');
 const { verifyPassword } = require('../src/db/requests/Password.js');
 const { getCategories } = require('../src/db/requests/Categories.js');
 const { createExpense, getExpenseDaily } = require('../src/db/requests/Expense.js');
+const { createBillChange, getBillChanges } = require('../src/db/requests/BillChange.js');
 
 
 
-conn.sync({ force: true }).then(async () => {
+conn.sync(/* { force: true } */).then(async () => {
   try {
     const verify = await verifyDb()
     if (!verify.length) {
@@ -56,7 +57,7 @@ function createWindow() {
     show: false,
     // backgroundColor:'#f9c8c8',
     // frame:false,
-    // autoHideMenuBar: true,
+    autoHideMenuBar: true,
     useContentSize: true,
     simpleFullscreen: true,
     webPreferences: {
@@ -242,20 +243,55 @@ ipcMain.handle('GET_PERCENTAGE_STYLIST', async (event, arg) => {
   }
 })
 
-ipcMain.handle ('UPDATE_PERCENTAGE_STYLIST', async (event, arg)=>{
-  try{
-    let update = await updatePercentage (arg)
+ipcMain.handle('UPDATE_PERCENTAGE_STYLIST', async (event, arg) => {
+  try {
+    let update = await updatePercentage(arg)
     return update
-  }catch (err){
+  } catch (err) {
     return err
   }
 })
 
-ipcMain.handle ('GET_EXPENSE_DAILY', async (event,arg)=>{
-  try{
-    let expenses = await getExpenseDaily ()
+ipcMain.handle('GET_EXPENSE_DAILY', async (event, arg) => {
+  try {
+    let expenses = await getExpenseDaily()
     return expenses
-  }catch (err){
+  } catch (err) {
+    return err
+  }
+})
+
+ipcMain.handle('UPDATE_OBS_CLIENT', async (event, arg) => {
+  try {
+    let updated = await updateObs(arg)
+  } catch (err) {
+    return (err)
+  }
+})
+
+
+ipcMain.handle('SEARCH_CLIENT_NAME', async (event, arg) => {
+  try {
+    let clients = await searchName(arg)
+    return clients
+  } catch (err) {
+    return err
+  }
+})
+
+ipcMain.handle('CREATE_BILL_CHANGE', async (event, arg) => {
+  try {
+    let changes = await createBillChange(arg)
+    return changes
+  } catch (err) {
+    return err
+  }
+})
+ipcMain.handle('GET_BILL_CHANGE', async (event, arg) => {
+  try {
+    let changes = await getBillChanges()
+    return changes
+  } catch (err) {
     return err
   }
 })

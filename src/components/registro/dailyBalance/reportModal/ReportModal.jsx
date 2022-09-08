@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import DailyBalance from "../DailyBalance";
 import S from "./reportModal.module.css";
 import x from "../../../../assets/Img/x.svg";
@@ -7,6 +7,7 @@ export default function ReportModal({
   setModalReport,
   dailyServices,
   expenses,
+  changes
 }) {
   let valUnitarios = {};
   let obj = {};
@@ -109,6 +110,7 @@ export default function ReportModal({
               valUnitarios={valUnitarios}
               stylist_gain={stylist_gain}
               dailyServices={dailyServices}
+              changes={changes}
             />
           </div>
         </div>

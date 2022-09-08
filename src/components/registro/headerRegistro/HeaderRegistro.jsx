@@ -6,7 +6,7 @@ export default function HeaderRegistro() {
     <div className={S.contHeaderReg} >
       <span className={S.columnClie} >Cliente</span>
       <span className={S.columnServ} >Servicio</span>
-      <span className={S.columnEstil} >Estilista</span>
+      <span className={S.columnEstil} >Esteticista</span>
       <span className={S.columnEstado} >Estado</span>
       <span className={S.columnPrecio} >Precio</span>
       <span className={S.columnVer} >Ver</span>

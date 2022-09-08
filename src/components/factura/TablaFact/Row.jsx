@@ -11,6 +11,7 @@ export default function Row({
   screenShot,
   bill,
   modal,
+  changeBill
 }) {
   const [servicios, setServicios] = useState([]);
   const [stylists, setStylist] = useState([]);
@@ -158,6 +159,8 @@ export default function Row({
     });
     return flag;
   });
+
+
   return services.map((e, idx) => (
     <div
       key={idx}
@@ -172,9 +175,10 @@ export default function Row({
       <div className={S.contDesc}>
         {saveBill &&
         !(
-          bill.status === "rechazada" ||
+          !changeBill && 
+          (bill.status === "rechazada" ||
           bill.status === "pendiente" ||
-          bill.status === "aprobada"
+          bill.status === "aprobada")
         ) ? (
           <Dropdown
             idx={idx}
@@ -194,12 +198,12 @@ export default function Row({
       </div>
       <input
         style={screenShot ? { height: "20px" } : {}}
-        disabled={
-          !saveBill ||
+        disabled={!changeBill &&
+          (!saveBill ||
           !e.id ||
           bill.status === "rechazada" ||
           bill.status === "pendiente" ||
-          bill.status === "aprobada"
+          bill.status === "aprobada")
         }
         className={S.cantColumn}
         type="number"
@@ -212,9 +216,10 @@ export default function Row({
         {saveBill &&
         e.service &&
         !(
-          bill.status === "rechazada" ||
+          !changeBill && 
+          (bill.status === "rechazada" ||
           bill.status === "pendiente" ||
-          bill.status === "aprobada"
+          bill.status === "aprobada")
         ) ? (
           <Dropdown
             idx={idx}
@@ -234,22 +239,22 @@ export default function Row({
         id={idx}
         onChange={onHandlerChange}
         name="price"
-        disabled={
-          !saveBill ||
+        disabled={!changeBill &&
+          (!saveBill ||
           !e.id ||
           bill.status === "rechazada" ||
           bill.status === "pendiente" ||
-          bill.status === "aprobada"
+          bill.status === "aprobada")
         }
       />
       <input
         style={screenShot ? { height: "20px" } : {}}
-        disabled={
-          !saveBill ||
+        disabled={!changeBill &&
+          (!saveBill ||
           !e.id ||
           bill.status === "rechazada" ||
           bill.status === "pendiente" ||
-          bill.status === "aprobada"
+          bill.status === "aprobada")
         }
         className={S.descuento}
         value={

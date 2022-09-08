@@ -16,6 +16,9 @@ import { screenshot } from "../../helpers/screenshot";
 import ButtonDeleteBill from "./buttons/ButtonDeleteBill";
 import ButtonSearchBill from "./buttons/ButtonSearchBill";
 import LastServices from "./lastService/LastServices";
+import editdoc from '../../assets/Img/editdoc.png'
+import moment from "moment";
+import ModalChange from "./modalChange/ModalChange";
 const ipcRenderer = window.ipcRenderer;
 
 export default function Factura() {
@@ -27,6 +30,9 @@ export default function Factura() {
   const [saveBill, setSaveBill] = useState(bill.id ? true : false);
   const [billUpdated, setBillUpdated] = useState(true);
   const [screenShot, setScreenShot] = useState(false);
+  const [manyClients, setManyClients] = useState (false)
+  const [changeBill,setChangeBill] = useState (false)
+  const [modalChange, setModalChange] = useState (false)
 
   let traerBillsProcess = async () => {
     let billsProcess = await ipcRenderer.invoke("GET_BILLS_PROCESS");
@@ -86,7 +92,7 @@ export default function Factura() {
     if (flag) {
       return Toast.fire({
         icon: "warning",
-        title: "Selecciona la estilista para los servicios",
+        title: "Selecciona la esteticista para los servicios",
       });
     }
 
@@ -127,6 +133,7 @@ export default function Factura() {
         icon: "success",
         title: "Guardado",
       });
+      setChangeBill (false)
     } catch (err) {
       console.log(err);
       return Toast.fire({
@@ -192,33 +199,38 @@ export default function Factura() {
             },
             color: "Black",
             showCancelButton: true,
+            inputValidator: (value) => {
+              if (!value) {
+                return "Por Favor escribe la razón y el plazo de pago!";
+              }
+            },
           });
           let obs = "";
           if (text) {
             obs = bill.observations
-              ? `${bill.observations}\nPendiente por:\n${text}`
+              ? `${bill.observations}\n<b>Pendiente por:</b>\n${text}`
               : `Pendiente por:\n${text}`;
-          }
-          await billSave({ status: "pendiente", obs: obs });
-          Swal.fire(
-            "Pendiente!",
-            "La factura queda en estado pendiente.",
-            "success"
-          );
-          setScreenShot((e) => !e);
-          setTimeout(() => {
-            let name = `${bill.id}-${client.name_client}`;
-            screenshot(name);
-            onHandlerBillProcess({ target: { id: "" } });
+            await billSave({ status: "pendiente", obs: obs });
+            Swal.fire(
+              "Pendiente!",
+              "La factura queda en estado pendiente.",
+              "success"
+            );
             setScreenShot((e) => !e);
-          }, 300);
+            setTimeout(() => {
+              let name = `${bill.id}-${client.name_client}`;
+              screenshot(name);
+              onHandlerBillProcess({ target: { id: "" } });
+              setScreenShot((e) => !e);
+            }, 300);
+          }
         }
       });
     } else {
       Toast.fire({
-        icon: 'success',
+        icon: "success",
         title: "Aprobada",
-        width:'250px'  ,
+        width: "250px",
       });
       let obs = bill.observations
         ? `${bill.observations}\nAPROBADA`
@@ -226,7 +238,10 @@ export default function Factura() {
       await billSave({ status: "aprobada", obs: obs });
       setScreenShot((e) => !e);
       setTimeout(() => {
-        let name = `${bill.id}-${client.name_client.split(" ").slice(0, 3).join(" ")}`;
+        let name = `${bill.id}-${client.name_client
+          .split(" ")
+          .slice(0, 3)
+          .join(" ")}`;
         screenshot(name);
         onHandlerBillProcess({ target: { id: "" } });
         setScreenShot((e) => !e);
@@ -236,24 +251,25 @@ export default function Factura() {
 
   const deleteBill = async () => {
     await billSave({});
-    let flag = false;
     const { value: text } = await Swal.fire({
       input: "textarea",
       inputLabel:
         "Porfavor Especifica la razón por la que se rechaza la factura:",
-      inputPlaceholder: "Comentarios...",
       color: "Black",
+      inputPlaceholder: "Comentarios...",
       showCancelButton: true,
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        flag = true;
-      }
+      inputValidator: (value) => {
+        if (!value) {
+          return "Porfavor Especifica la razón por la que se rechaza la factura!";
+        }
+      },
     });
-    if (flag || text) {
+    if (text) {
       let obs = bill.observations
         ? `${bill.observations}\nRechazada por:\n${text}`
         : `Rechazada por:\n${text}`;
       await billSave({ status: "rechazada", obs: obs });
+      onHandlerBillProcess({ target: { id: "" } });
       Swal.fire(
         "rechazada!",
         "La factura queda en estado rechazada.",
@@ -263,33 +279,74 @@ export default function Factura() {
   };
 
   const handlerSearchBill = async (id) => {
-    let infoClient = await ipcRenderer.invoke("GET_LAST_BILL_CLIENT", id);
-    if (infoClient) {
-      setInfoClient(infoClient);
-      Toast.fire({
-        icon: "success",
-        title: "Revisa menu lateral para ver la información",
-      });
-      /*       setBill((e) => billFound.bill);
-      setServices((e) => billFound.service);
-      setClient((e) => billFound.client); */
-      // setSaveBill(true);
-      // setTimeout(() => {
-      //   setBillUpdated(true);
-      // }, 400);
-    } else {
-      Toast.fire({
-        icon: "warning",
-        title: "No se encontro el cliente",
-      });
+    if (!isNaN(parseInt(id)) && typeof parseInt(id) === "number") {
+      let infoClient = await ipcRenderer.invoke("GET_LAST_BILL_CLIENT", id);
+      if (infoClient) {
+        setManyClients (false)
+        setInfoClient(infoClient);
+        /* Toast.fire({
+          icon: "success",
+          title: "Revisa el panel para ver la información",
+        }); */
+        if (!saveBill){
+          let clientFound = await ipcRenderer.invoke("GET_ONE_CLIENT", id);
+          setClient(clientFound);
+        }
+        /*             setBill((e) => billFound.bill);
+        setServices((e) => billFound.service);
+        setClient((e) => billFound.client);
+        setSaveBill(true);
+        setTimeout(() => {
+          setBillUpdated(true);
+        }, 400); */
+      } else {
+        Toast.fire({
+          icon: "warning",
+          title: "No se encontro el cliente",
+        });
+      }
+    } else if (typeof id === "string") {
+      let infoClient = await ipcRenderer.invoke("SEARCH_CLIENT_NAME", id);
+      if (infoClient.length === 1) {
+        Toast.fire({
+          icon: "success",
+          title: "Revisa el panel para ver la información",
+        });
+        handlerSearchBill(infoClient[0].id);
+      }else if (infoClient.length > 1){
+        Toast.fire({
+          icon: 'info',
+          title: `Se encontraron ${infoClient.length} Clientes, revisalos en el panel`,
+        });
+        setManyClients (true)
+        setInfoClient(infoClient)
+      }
     }
+  };
+
+  const onHandlerSeeBill = async (id) => {
+    let billFound = await ipcRenderer.invoke("GET_ONE_BILL", id);
+    setBill((e) => billFound.bill);
+    setServices((e) => billFound.service);
+    setClient((e) => billFound.client);
+    setSaveBill(true);
+    setTimeout(() => {
+      setBillUpdated(true);
+    }, 400);
   };
 
   return (
     <div className={S.maincont}>
-      <LastServices infoClient={infoClient} />
+      <LastServices
+        infoClient={infoClient}
+        onHandlerSeeBill={onHandlerSeeBill}
+        manyClients={manyClients}
+        handlerSearchBill={handlerSearchBill}
+        saveBill={saveBill}
+      />
       <ButtonSearchBill handlerSearchBill={handlerSearchBill} />
       <div id="factura" className={screenShot ? S.contScreen : S.cont}>
+          {bill.status === "aprobada" && moment().format('YYYY-MM-DD')===moment(bill.bill_date).format('YYYY-MM-DD') ?<img style={{position:'absolute', top:'20px', right:'20px', cursor:'pointer' }} onClick={()=>setModalChange(true)} src={editdoc} alt="" />:null}
         <div className={S.dropBillProcess}>
           <Dropdown
             billProcess={true}
@@ -317,6 +374,7 @@ export default function Factura() {
           saveBill={saveBill}
           screenShot={screenShot}
           setInfoClient={setInfoClient}
+          setManyClients={setManyClients}handlerSearchBill={handlerSearchBill}
         />
         <HeaderTabla />
         <Row
@@ -325,6 +383,7 @@ export default function Factura() {
           saveBill={saveBill}
           services={services}
           setServices={setServices}
+          changeBill={changeBill}
         />
         <Count
           saveBill={saveBill}
@@ -332,6 +391,7 @@ export default function Factura() {
           setBill={setBill}
           services={services}
           screenShot={screenShot}
+          changeBill={changeBill}
         />
       </div>
       <div className={S.contButtons}>
@@ -339,7 +399,7 @@ export default function Factura() {
           <ButtonCreate createBill={createBill} />
         ) : (
           <>
-            {bill.status !== "aprobada" && bill.status !== "rechazada" ? (
+            {changeBill || bill.status !== "aprobada" && bill.status !== "rechazada" ? (
               <ButtonSave billSave={billSave} />
             ) : null}
             {bill.status !== "aprobada" && bill.status !== "rechazada" ? (
@@ -348,6 +408,7 @@ export default function Factura() {
           </>
         )}
       </div>
+      {modalChange && <ModalChange setModalChange={setModalChange} setChangeBill={setChangeBill} idBill={bill.id} />}
     </div>
   );
 }

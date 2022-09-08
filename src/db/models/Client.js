@@ -19,6 +19,14 @@ module.exports = (sequelize) => {
       phone: {
         type: DataTypes.STRING,
       },
+      personal_obs:{
+        type: DataTypes.TEXT,
+        defaultValue: '',
+      },
+      technical_obs:{
+        type: DataTypes.TEXT,
+        defaultValue: '',
+      }
     },
     {
       timestamps: false,

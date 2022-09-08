@@ -1,4 +1,5 @@
 const { Client, Bill, ServiceDone, Service, Stylist } = require("../db")
+const { Op } = require("sequelize");
 
 const createClient = async (client) => {
   try {
@@ -54,10 +55,12 @@ const getBillsClient = async (id) => {
     if (!bills)return bills
 
     let b=JSON.parse(JSON.stringify(bills))
-
     let services_client= []
     let info = {
       name_client:b.name_client,
+      id:b.id,
+      personal_obs:b.personal_obs,
+      technical_obs:b.technical_obs
     }
     b.bills.forEach ((e)=>{
       info.id_bill=e.id
@@ -76,10 +79,43 @@ const getBillsClient = async (id) => {
   }
 }
 
+const updateObs= async (obs)=>{
+  try{
+    const updatedClient = await Client.update( obs, {
+      where: {
+        id: obs.id
+      },
+    })
+    return updatedClient
+  }catch (err){
+    console.log (err)
+    throw new Error ('Error al guardar las Observaciones')
+  }
+}
+
+const searchName = async (name)=>{
+  try{ 
+    let client = await Client.findAll ({
+      where:{
+        name_client: {
+          [Op.like]:`%${name}%` 
+        } 
+      }
+    })
+    return client
+  }catch (err){
+    console.log (err)
+    throw new Error ('Error al buscar el cliente por nombre')
+  }
+}
 
 
 module.exports = {
   createClient,
   getOneClient,
-  getBillsClient
+  getBillsClient,
+  updateObs,
+  searchName
 }
+
+
