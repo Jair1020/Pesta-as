@@ -9,7 +9,7 @@ const createClient = async (client) => {
       const newClient = await Client.create(client)
       return newClient.get({ plain: true })
     } else {
-      const updatedClient = await Client.update({ client }, {
+      const updatedClient = await Client.update( client , {
         where: {
           id: client.id
         },

@@ -11,7 +11,6 @@ export default function DataClient({
   screenShot,
   setInfoClient,
   setManyClients,
-  handlerSearchBill,
 }) {
   const onHandlerChange = (e) => {
     setClient({ ...client, [e.target.name]: e.target.value });
@@ -21,16 +20,22 @@ export default function DataClient({
       let clientFound = await ipcRenderer.invoke("GET_ONE_CLIENT", client.id);
       if (clientFound) {
         setClient(clientFound);
-        let infoClient = await ipcRenderer.invoke(
+        let infoBillsClient = await ipcRenderer.invoke(
           "GET_LAST_BILL_CLIENT",
           client.id
         );
-        setInfoClient(infoClient);
+        setInfoClient(infoBillsClient);
+        Toast.fire({
+          icon: 'success',
+          title: "Cliente encontrado",
+        })
       } else {
         Toast.fire({
           icon: "info",
           title: "No se encontro cliente",
         });
+        setInfoClient ([])
+        setClient(e=>({...e, name_client:'', phone:'',email:''}));
       }
     } else {
       let infoClient = await ipcRenderer.invoke(
@@ -43,24 +48,35 @@ export default function DataClient({
           infoClient[0].id
         );
         setClient(clientFound);
-        let infoClient = await ipcRenderer.invoke(
+        let BillsClient = await ipcRenderer.invoke(
           "GET_LAST_BILL_CLIENT",
-          client.id
+          infoClient[0].id
         );
-        setInfoClient(infoClient);
+        setInfoClient(BillsClient);
       } else if (infoClient.length > 1) {
         Toast.fire({
           icon: "info",
           title: `Se encontraron ${infoClient.length} Clientes, revisalos en el panel`,
         });
         setManyClients(true);
+        setClient(e=>({...e, phone:'',email:'', id:''}))
         setInfoClient(infoClient);
+      }else if (!infoClient.length){
+        Toast.fire({
+          icon: "info",
+          title: `No se encontraron clientes con ese nombre`,
+        });
+        setClient(e=>({...e, phone:'',email:'', id:''}));
+        setInfoClient([]);
+        setManyClients(false)
       }
     }
   };
   const onkeypress = (e) => {
+    let id = e.target.id
+    id = id.split('-')
     if (e.key === "Enter") {
-      document.querySelector(`#${e}`).click();
+      document.querySelector(`#${id[0]}`).click();
     }
   };
 
@@ -70,8 +86,9 @@ export default function DataClient({
         <label>Cliente:</label>
         <div style={{ display: "flex", flexDirection: "row", width:'100%' }}>
           <input
+            id="searchClientName-input"
             className={S.inputName}
-            onKeyPress={() => onkeypress("searchClientName")}
+            onKeyPress={onkeypress}
             style={screenShot ? { height: "20px" } : {}}
             disabled={saveBill}
             type="text"
@@ -102,7 +119,8 @@ export default function DataClient({
         <label>Documento:</label>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <input
-            onKeyPress={() => onkeypress("searchClient")}
+            id="searchClient-input"
+            onKeyPress={onkeypress}
             style={screenShot ? { height: "20px" } : {}}
             disabled={saveBill}
             type="number"

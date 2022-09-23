@@ -1,48 +1,66 @@
-const {Service,Category} = require ('../db.js')
+const { Service, Category } = require('../db.js')
 
- const getServices = async ()=>{
-  try{
-    const services = await Service.findAll ({
+const getServices = async () => {
+  try {
+    const services = await Service.findAll({
       raw: true,
-      where:{
-        disabled:false
+      where: {
+        disabled: false
       },
-      attributes: ['id', 'name_service','price'],
+      attributes: ['id', 'name_service', 'price'],
       include: [{
         model: Category,
-        attributes: ['name_category','id']
+        attributes: ['name_category', 'id']
       }],
     })
     return services
-  }catch (err){
-    console.log (err)
+  } catch (err) {
+    console.log(err)
     return (err)
   }
 }
-const updateService = async (service)=>{
-  try{ 
-    const updateService= await Service.update (service,{
-      raw:true,
-      where:{
-        id:service.id
-      }   
+
+const getAllServices = async () => {
+  try {
+    const services = await Service.findAll({
+      raw: true,
+      attributes: ['id', 'name_service', 'price'],
+      include: [{
+        model: Category,
+        attributes: ['name_category', 'id']
+      }],
     })
-    if (!service.disabled){
-      const instanceService = await Service.findByPk (service.id,{raw:false}) 
+    return services
+  } catch (err) {
+    console.log(err)
+    return (err)
+  }
+}
+
+const updateService = async (service) => {
+  try {
+    const updateService = await Service.update(service, {
+      raw: true,
+      where: {
+        id: service.id
+      }
+    })
+    if (!service.disabled) {
+      const instanceService = await Service.findByPk(service.id, { raw: false })
       await instanceService.setCategory(service.id_category)
     }
     return true
-  }catch (err){
-    console.log (err)
-    throw new Error (err)
+  } catch (err) {
+    console.log(err)
+    throw new Error(err)
   }
 }
-const createService = async (service)=>{
-  try{
-    const newService = await Service.create (service)
-    await newService.setCategory (service.id_category)
+const createService = async (service) => {
+  try {
+    const newService = await Service.create(service)
+    await newService.setCategory(service.id_category)
     return true
-  }catch (err){
+  } catch (err) {
     console.log(err)
     throw new Error(err)
   }
@@ -52,6 +70,7 @@ const createService = async (service)=>{
 module.exports = {
   getServices,
   updateService,
-  createService
+  createService,
+  getAllServices
 }
 

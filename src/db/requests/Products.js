@@ -20,6 +20,23 @@ const getProducts = async () => {
     return (err)
   }
 }
+const getAllProducts = async () => {
+  try {
+    const products = await Product.findAll({
+      raw: true,
+      attributes: ['id', 'name_product', 'price'],
+      include: [{
+        model: Category,
+        attributes: ['name_category', 'id']
+      }],
+
+    })
+    return products
+  } catch (err) {
+    console.log(err)
+    return (err)
+  }
+}
 
 const updateProduct = async (product) => {
   try {
@@ -53,5 +70,6 @@ const createProduct = async (product)=>{
 module.exports = {
   getProducts,
   updateProduct,
-  createProduct
+  createProduct,
+  getAllProducts
 }

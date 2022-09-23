@@ -69,7 +69,7 @@ export default function Factura() {
       });
     } else {
       // setBill ({bill_date:new Date(Date.now())})}
-      let createclient = await ipcRenderer.invoke("CREATE_CLIENT", client);
+      await ipcRenderer.invoke("CREATE_CLIENT", client);
       let createBill = await ipcRenderer.invoke("CREATE_BILL", {
         bill_date: new Date(Date.now()),
         id_client: client.id,
@@ -208,7 +208,7 @@ export default function Factura() {
           let obs = "";
           if (text) {
             obs = bill.observations
-              ? `${bill.observations}\n<b>Pendiente por:</b>\n${text}`
+              ? `${bill.observations}\nPendiente por:\n${text}`
               : `Pendiente por:\n${text}`;
             await billSave({ status: "pendiente", obs: obs });
             Swal.fire(
@@ -320,6 +320,8 @@ export default function Factura() {
         });
         setManyClients (true)
         setInfoClient(infoClient)
+      }else if (infoClient.length===0){
+        setInfoClient([])
       }
     }
   };
@@ -399,7 +401,7 @@ export default function Factura() {
           <ButtonCreate createBill={createBill} />
         ) : (
           <>
-            {changeBill || bill.status !== "aprobada" && bill.status !== "rechazada" ? (
+            {changeBill || (bill.status !== "aprobada" && bill.status !== "rechazada") ? (
               <ButtonSave billSave={billSave} />
             ) : null}
             {bill.status !== "aprobada" && bill.status !== "rechazada" ? (

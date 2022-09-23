@@ -5,19 +5,10 @@
   height: 20px;  
 }
 .table td{
-  
+  font-size: small;
   height: 20px;  
   background-color:#98c1d9;
   padding-block: 2px;
   padding-inline: 5px;
-}
-
-.exportExcel{
- padding-inline: 10px;
- padding-block: 2px; 
- border-radius: 10px;
- border: 1px solid black;
- cursor: pointer;
- background-color:#fdecec;
- 
+  text-align: center;
 }

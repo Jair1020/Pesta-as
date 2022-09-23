@@ -14,7 +14,7 @@ export default function DailyBalance({
         id="DescargarReporte"
         className={S.exportExcel}
         table="tableReport"
-        filename="Reporte-01/05/2022"
+        filename={`Reporte-${new Date(Date.now()).toLocaleDateString()}`}
         sheet="Reporte"
         buttonText="Exportar a Excel"
       />

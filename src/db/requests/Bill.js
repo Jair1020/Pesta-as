@@ -1,4 +1,5 @@
-const { Bill, ServiceDone, Service, Client, Product, Stylist } = require("../db")
+const { Op } = require("sequelize")
+const { Bill, ServiceDone, Service, Client, Product, Stylist,Stylist_Category } = require("../db")
 
 const createBill = async (bill) => {
   try {
@@ -181,10 +182,80 @@ const getOneBill = async (id) => {
     throw new Error('Error al Obtener la Factura')
   }
 }
+const getBills = async (date) => {
+  try {
+    const bills = await Bill.findAll({
+      raw: false,
+      where: {
+        bill_date:{
+          [Op.between]: date
+        },
+        status:{[Op.not]:'rechazada'}
+      },
+      include: [{
+        model: Client,
+      }, {
+        model: ServiceDone,
+        include: [Service, Stylist]
+      }, {
+        model: Product,
+      }
+      ]
+    })
+    let stylist_category = await Stylist_Category.findAll({ raw: true })
+    let billsData = JSON.parse(JSON.stringify(bills))
+    let servicesdaily = [];
+    billsData.map((b) => {
+      let dataBill = {
+        id_bill: b.id,
+        name_client: b.client.name_client,
+        status: b.status,
+        catch: b.catch,
+        transferDav: b.transferDav,
+        transferBanc: b.transferBanc,
+        card: b.card,
+        debt: b.debt
+      }
+
+      b.serviceDones.map(s => {
+        dataBill.price = s.price_Total;
+        dataBill.num_order = s.num_order;
+        dataBill.name_service = s.service.name_service;
+        dataBill.name_stylist = s.stylist.name_stylist
+        let table = stylist_category.find(e => (e.stylistId == s.stylistId && e.categoryId == s.service.categoryId))
+        dataBill.percentage = table.percentage
+        servicesdaily.push({ ...dataBill })
+      })
+      dataBill = {
+        id_bill: b.id,
+        name_client: b.client.name_client,
+        status: b.status,
+        catch: b.catch,
+        transferDav: b.transferDav,
+        transferBanc: b.transferBanc,
+        card: b.card,
+        debt: b.debt
+      }
+
+      b.products.map(p => {
+        dataBill.price = p.product_Bill.price_Total;
+        dataBill.num_order = p.product_Bill.num_order;
+        dataBill.name_product = p.name_product;
+        servicesdaily.push({ ...dataBill })
+      })
+      servicesdaily = servicesdaily.sort((a, b) => a.id_bill - b.id_bill)/* .sort((a, b) => a.num_order - b.num_order) */
+    })
+    return servicesdaily
+  } catch (err) {
+    console.log(err)
+    throw new Error('Error al obtener los servicios')
+  }
+}
 
 module.exports = {
   createBill,
   getBillsProcess,
   updateBill,
-  getOneBill
+  getOneBill,
+  getBills
 }

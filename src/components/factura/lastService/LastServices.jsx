@@ -12,7 +12,7 @@ import moment from "moment/moment";
 
 const ipcRenderer = window.ipcRenderer;
 
-export default function ({
+export default function LastServices({
   infoClient,
   onHandlerSeeBill,
   manyClients,
@@ -22,12 +22,19 @@ export default function ({
   const [showObs, setShowObs] = useState(false);
   const [obse, setObse] = useState({});
   useEffect(() => {
-    if (infoClient.length && !(obse.personal_obs || obse.technical_obs)) {
+    if (infoClient.length) {
       setObse({
         personal_obs: infoClient[0].personal_obs,
         technical_obs: infoClient[0].technical_obs,
       });
+    }else {
+      setObse({
+        personal_obs: '',
+        technical_obs: '',
+      })
     }
+    setShowObs (false)
+    setObsSaved (true)
   }, [infoClient]);
 
   const [obsSaved, setObsSaved] = useState(true);
@@ -39,7 +46,7 @@ export default function ({
     setObse((o) => ({ ...o, [e.target.name]: e.target.value }));
   };
   const onHandlerSaveObs = async () => {
-    let updated = await ipcRenderer.invoke("UPDATE_OBS_CLIENT", {
+    await ipcRenderer.invoke("UPDATE_OBS_CLIENT", {
       ...obse,
       id: infoClient[0].id,
     });

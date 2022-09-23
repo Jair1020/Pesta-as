@@ -1,0 +1,50 @@
+.contFilter{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 30px;
+  background-color: #ef4a4b;
+  margin-inline: 50px;
+  padding-block: 10px;
+  border-radius: 10px;
+}
+
+.fecha{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+}
+.fecha div {
+  display: flex;
+  align-items: center;
+
+}
+.fecha div label{
+  width: 50px;
+}
+
+.contButtons{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.contButtons button{
+  border: none;
+  padding-inline: 10px;
+  border-radius: 10px;
+  background-color: white;
+  cursor: pointer;
+  font-size: small;
+}
+
+.filt{
+  border: none;
+  padding-inline: 20px;
+  border-radius: 10px;
+  background-color: black;
+  cursor: pointer;
+  font-size:large;
+  color: white;
+  padding-block: 3px;
+}

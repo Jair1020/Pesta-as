@@ -1,3 +1,4 @@
+const { Op } = require("sequelize")
 const { Expense } = require("../db")
 
 
@@ -25,10 +26,25 @@ const getExpenseDaily = async () => {
     throw new Error('Error al obtener los gastos del día')
   }
 }
-
+const getExpenses = async (date) => {
+  try {
+    let expenses= await Expense.findAll({
+      where: {
+        expense_date:{
+          [Op.between]: date
+        }
+      }
+    })
+    return expenses
+  } catch (err) {
+    console.log(err)
+    throw new Error('Error al obtener los gastos del día')
+  }
+}
 
 
 module.exports = {
   createExpense,
-  getExpenseDaily
+  getExpenseDaily,
+  getExpenses
 }

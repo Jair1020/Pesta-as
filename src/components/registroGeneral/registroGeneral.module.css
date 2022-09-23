@@ -5,3 +5,11 @@
   width: 50px;
   cursor: pointer;
 }
+
+.cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding-inline: 20px;
+}

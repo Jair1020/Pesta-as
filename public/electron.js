@@ -3,11 +3,11 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 
 const { conn } = require('../src/db/db.js');
 
-const { getServices, updateService, createService } = require('../src/db/requests/Services');
-const { getStylists, updateStylist, createStylist, getPercentages, updatePercentage } = require('../src/db/requests/Stylist');
+const { getServices, updateService, createService, getAllServices } = require('../src/db/requests/Services');
+const { getStylists, updateStylist, createStylist, getPercentages, updatePercentage, getAllStylists } = require('../src/db/requests/Stylist');
 const { createClient, getOneClient, getBillsClient, updateObs, searchName } = require('../src/db/requests/Client');
-const { createBill, getBillsProcess, updateBill, getOneBill } = require('../src/db/requests/Bill');
-const { getProducts, updateProduct, createProduct } = require('../src/db/requests/Products');
+const { createBill, getBillsProcess, updateBill, getOneBill, getBills } = require('../src/db/requests/Bill');
+const { getProducts, updateProduct, createProduct, getAllProducts } = require('../src/db/requests/Products');
 const { createServiceDone, getDailyServices } = require('../src/db/requests/ServiceDone');
 const {
   loadServices,
@@ -22,7 +22,7 @@ const {
 const isDev = require('electron-is-dev');
 const { verifyPassword } = require('../src/db/requests/Password.js');
 const { getCategories } = require('../src/db/requests/Categories.js');
-const { createExpense, getExpenseDaily } = require('../src/db/requests/Expense.js');
+const { createExpense, getExpenseDaily, getExpenses } = require('../src/db/requests/Expense.js');
 const { createBillChange, getBillChanges } = require('../src/db/requests/BillChange.js');
 
 
@@ -88,9 +88,17 @@ ipcMain.handle('GET_SERVICES', async (event, arg) => {
   let services = await getServices()
   return services
 })
+ipcMain.handle('GET_ALL_SERVICES', async (event, arg) => {
+  let services = await getAllServices()
+  return services
+})
 
 ipcMain.handle('GET_PRODUCTS', async (event, arg) => {
   let products = await getProducts()
+  return products
+})
+ipcMain.handle('GET_ALL_PRODUCTS', async (event, arg) => {
+  let products = await getAllProducts()
   return products
 })
 
@@ -103,6 +111,12 @@ ipcMain.handle('GET_STYLISTS', async (event, arg) => {
   let stylists = await getStylists()
   return stylists
 })
+
+ipcMain.handle('GET_ALL_STYLISTS', async (event, arg) => {
+  let stylists = await getAllStylists()
+  return stylists
+})
+
 
 ipcMain.handle('CREATE_CLIENT', async (event, arg) => {
   let client = await createClient(arg)
@@ -260,6 +274,14 @@ ipcMain.handle('GET_EXPENSE_DAILY', async (event, arg) => {
     return err
   }
 })
+ipcMain.handle('GET_GENERAL_EXPENSES', async (event, arg) => {
+  try {
+    let expenses = await getExpenses (arg)
+    return expenses
+  } catch (err) {
+    return err
+  }
+})
 
 ipcMain.handle('UPDATE_OBS_CLIENT', async (event, arg) => {
   try {
@@ -292,6 +314,15 @@ ipcMain.handle('GET_BILL_CHANGE', async (event, arg) => {
     let changes = await getBillChanges()
     return changes
   } catch (err) {
+    return err
+  }
+})
+
+ipcMain.handle ('GET_GENERAL_BILLS', async (event, arg)=>{
+  try{
+    let bills= await getBills (arg)
+    return bills
+  }catch (err){
     return err
   }
 })

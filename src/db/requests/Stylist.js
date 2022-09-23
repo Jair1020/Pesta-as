@@ -14,6 +14,18 @@ const getStylists = async () => {
     return (err)
   }
 }
+const getAllStylists = async () => {
+  try {
+    const stylists = await Stylist.findAll({
+      raw: true
+    })
+    return stylists
+  } catch (err) {
+    console.log(err)
+    return (err)
+  }
+}
+
 
 const updateStylist = async (stylist) => {
   try {
@@ -110,5 +122,6 @@ module.exports = {
   updateStylist,
   createStylist,
   updatePercentage,
-  getPercentages
+  getPercentages,
+  getAllStylists
 }

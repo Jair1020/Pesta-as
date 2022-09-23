@@ -64,6 +64,7 @@ const getDailyServices = async () => {
         bill_date: new Date() /* {
           [Op.between]: ['2022-08-29', '2022-09-02']
         } */,
+        status:{[Op.not]:'rechazada'}
       },
       include: [{
         model: Client,
@@ -95,7 +96,7 @@ const getDailyServices = async () => {
         dataBill.num_order = s.num_order;
         dataBill.name_service = s.service.name_service;
         dataBill.name_stylist = s.stylist.name_stylist
-        let table = stylist_category.find(e =>(e.stylistId == s.stylistId && e.categoryId == s.service.categoryId))  
+        let table = stylist_category.find(e => (e.stylistId == s.stylistId && e.categoryId == s.service.categoryId))
         dataBill.percentage = table.percentage
         servicesdaily.push({ ...dataBill })
       })
@@ -127,7 +128,14 @@ const getDailyServices = async () => {
 }
 
 
+
 module.exports = {
   createServiceDone,
   getDailyServices,
 }
+
+
+/* filters={
+  bill_date: {[Op.between]: [fecha1, fecha2]}
+
+}  */
