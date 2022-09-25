@@ -7,6 +7,7 @@ import ModalBill from "../registro/modalBill/ModalBill";
 import Filters from "./filters/Filters";
 import S from "./registroGeneral.module.css";
 import Table from "./table/Table";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 const ipcRenderer = window.ipcRenderer;
 
 export default function RegistroGeneral() {
@@ -76,6 +77,14 @@ export default function RegistroGeneral() {
         setFilterservices={setFilterservices}
         filterStylists={filterStylists}
         setFilterStylists={setFilterStylists}
+      />
+      <ReactHTMLTableToExcel
+        id="ButtonReporteGeneral"
+        className={S.exportExcel}
+        table="ReporteGeneral"
+        filename={`Reporte-General`}
+        sheet="Reporte General"
+        buttonText="Exportar a Excel"
       />
       <Table values={values} services={services} gainStylists={gainStylists} seeBill={seeBill}  />
       {modal.state && <ModalBill client={modal.client} bill={modal.bill} services={modal.services} setModal={setModal} />}

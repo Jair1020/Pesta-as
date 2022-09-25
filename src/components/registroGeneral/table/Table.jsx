@@ -15,7 +15,7 @@ export default function Table({ values, services, gainStylists, seeBill }) {
   }, 0);
 
   return (
-    <table className={S.table}>
+    <table id='ReporteGeneral' className={S.table}>
       <tbody>
         <tr>
           <th colSpan="9"> Balance General</th>

@@ -13,3 +13,14 @@
   gap: 20px;
   padding-inline: 20px;
 }
+.exportExcel{
+  padding-inline: 10px;
+  padding-block: 2px; 
+  border-radius: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+  background-color:#fdecec;
+  width: 150px;
+  align-self: center;
+  
+ }
