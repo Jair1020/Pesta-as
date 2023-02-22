@@ -8,6 +8,10 @@
 # db
 /path
 
+# ejecutable
+
+/dist
+
 # testing
 /coverage
 

@@ -5,7 +5,7 @@ const { conn } = require('../src/db/db.js');
 
 const { getServices, updateService, createService, getAllServices } = require('../src/db/requests/Services');
 const { getStylists, updateStylist, createStylist, getPercentages, updatePercentage, getAllStylists } = require('../src/db/requests/Stylist');
-const { createClient, getOneClient, getBillsClient, updateObs, searchName } = require('../src/db/requests/Client');
+const { createClient, getOneClient, getBillsClient, updateObs, searchName, updateID } = require('../src/db/requests/Client');
 const { createBill, getBillsProcess, updateBill, getOneBill, getBills } = require('../src/db/requests/Bill');
 const { getProducts, updateProduct, createProduct, getAllProducts } = require('../src/db/requests/Products');
 const { createServiceDone, getDailyServices } = require('../src/db/requests/ServiceDone');
@@ -57,7 +57,7 @@ function createWindow() {
     show: false,
     // backgroundColor:'#f9c8c8',
     // frame:false,
-    autoHideMenuBar: true,
+    // autoHideMenuBar: true,
     useContentSize: true,
     simpleFullscreen: true,
     webPreferences: {
@@ -326,6 +326,16 @@ ipcMain.handle ('GET_GENERAL_BILLS', async (event, arg)=>{
     return err
   }
 })
+ 
+ipcMain.handle ('UPDATE_IDCLIENT', async (event, arg)=>{
+  try{
+    let updateClient = await updateID (arg)
+    return updateClient
+  }catch (err){
+    return err
+  }
+})
+
 //----------------------------------------------//
 
 

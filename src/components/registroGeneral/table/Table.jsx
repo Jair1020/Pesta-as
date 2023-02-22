@@ -13,7 +13,7 @@ export default function Table({ values, services, gainStylists, seeBill }) {
     }
     return acc;
   }, 0);
-
+  console.log (services)
   return (
     <table id='ReporteGeneral' className={S.table}>
       <tbody>
@@ -75,6 +75,7 @@ export default function Table({ values, services, gainStylists, seeBill }) {
           <th colSpan="9"> </th>
         </tr>
         <tr>
+          <th>Fecha</th>
           <th>Cliente</th>
           <th>Servicio</th>
           <th>Esteticista</th>
@@ -86,6 +87,7 @@ export default function Table({ values, services, gainStylists, seeBill }) {
 
         {services.map((e, idx) => (
           <tr key={idx}>
+            <td>{new Date(e.bill_date).toLocaleDateString() }</td>
             <td>{e.name_client}</td>
             <td>{e.name_service ? e.name_service : e.name_product}</td>
             <td>{e.name_stylist ? e.name_stylist : "-----"}</td>

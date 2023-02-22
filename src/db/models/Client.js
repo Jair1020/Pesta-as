@@ -26,6 +26,10 @@ module.exports = (sequelize) => {
       technical_obs:{
         type: DataTypes.TEXT,
         defaultValue: '',
+      },
+      disabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       }
     },
     {

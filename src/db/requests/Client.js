@@ -25,6 +25,7 @@ const createClient = async (client) => {
 const getOneClient = async (id) => {
   try {
     const client = await Client.findByPk(id)
+    console.log (client)
     return client
 
   } catch (err) {
@@ -54,14 +55,14 @@ const getBillsClient = async (id) => {
     })
     if (!bills)return bills
 
-    let b=JSON.parse(JSON.stringify(bills))
-    let services_client= []
+    let b=JSON.parse(JSON.stringify(bills))  
     let info = {
       name_client:b.name_client,
       id:b.id,
       personal_obs:b.personal_obs,
       technical_obs:b.technical_obs
     }
+    let services_client= b.bills.length?[]: [info] 
     b.bills.forEach ((e)=>{
       info.id_bill=e.id
       info.date=e.bill_date
@@ -99,7 +100,8 @@ const searchName = async (name)=>{
       where:{
         name_client: {
           [Op.like]:`%${name}%` 
-        } 
+        },
+        disabled: false 
       }
     })
     return client
@@ -109,13 +111,33 @@ const searchName = async (name)=>{
   }
 }
 
+const updateID = async (ids)=>{
+  try{
+    const client = await Client.findByPk(ids.new)
+    if (!client){
+      let updatedClient = await Client.update( {id:ids.new}, {
+        where: {
+          id: ids.previous
+        },
+      })
+    }else {
+      return 'El id ya pertenece a otro cliente'
+    }
+    return true
+  }catch (err){
+    console.log (err)
+    throw new Error ('Error al actualizar el id del cliente')
+  }
+}
+
 
 module.exports = {
   createClient,
   getOneClient,
   getBillsClient,
   updateObs,
-  searchName
+  searchName,
+  updateID
 }
 
 

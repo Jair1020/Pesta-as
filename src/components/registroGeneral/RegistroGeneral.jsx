@@ -25,7 +25,8 @@ export default function RegistroGeneral() {
     state:false
   })
   const getInfoGeneral = async () => {
-    let bills = await ipcRenderer.invoke("GET_GENERAL_BILLS", dates);
+    let bills = await ipcRenderer.invoke
+    ("GET_GENERAL_BILLS", dates);
     let expenses = await ipcRenderer.invoke("GET_GENERAL_EXPENSES", dates);
     let values = valUnitarios({ services: bills, expenses });
     // console.log(values);

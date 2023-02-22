@@ -6,6 +6,8 @@ import add from "../../assets/Img/add.png";
 import { Toast } from "../features.js/Toast";
 import ModalAdd from "./modalAdd/ModalAdd";
 import { valAdd } from "./valAdd";
+import clients from "../../assets/Img/obs.png"
+import ModalClient from "./modalClient/ModalClient";
 const ipcRenderer = window.ipcRenderer;
 const secciones = ["Esteticistas", "Servicios", "Productos"];
 
@@ -14,6 +16,7 @@ export default function Settings() {
   const [seccion, setSeccion] = useState([]);
   const [categories, setCategories] = useState([]);
   const [modalAdd, setModalAdd] = useState(false);
+  const [modalClient, setModalClient] = useState (false)
 
   const onHandlerSeccion = async (e) => {
     let idx = parseInt(e);
@@ -79,6 +82,7 @@ export default function Settings() {
   };
   return (
     <div className={S.cont}>
+      <img style={{ position: "absolute", right: 20, cursor:  'pointer' }}  src={clients} alt="" onClick={()=>setModalClient (!modalClient)}  />
       <div style={{ display: "flex", alignItems: "center" }}>
         <div className={S.chooseSeccion}>
           <span>¿En que sección deseas hacer cambios?</span>
@@ -112,6 +116,12 @@ export default function Settings() {
           create={create}
         />
       ) : null}
+      {modalClient?(
+        <ModalClient
+        setModalClient={setModalClient}
+        />
+      ):null
+      }
     </div>
   );
 }

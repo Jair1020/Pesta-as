@@ -87,7 +87,7 @@ export default function LastServices({
       </label>
       <div className={S.container}>
         <div className={S.cont}>
-          <nav>
+          {infoClient.length?<nav>
             {!manyClients ? (
               <>
                 <div className={S.divIcon}>
@@ -96,8 +96,8 @@ export default function LastServices({
                       ? infoClient[0].name_client
                       : "El cliente no tiene servicios"}
                   </span>
-                  {infoClient.length ? (
-                    obsSaved ? (
+                   
+                    {obsSaved ? (
                       <img
                         className={S.obsIcon}
                         src={obs}
@@ -111,10 +111,11 @@ export default function LastServices({
                         alt=""
                         onClick={onHandlerSaveObs}
                       />
-                    )
-                  ) : null}
+                    )}
+                  
+                  
                 </div>
-                {!showObs ? (
+                { !infoClient[0] || (!showObs && infoClient[0].date) ? (
                   infoClient.map((e, idx) => (
                     <div key={idx}>
                       <div style={{display:'flex', gap:'10px'}} >
@@ -158,7 +159,7 @@ export default function LastServices({
                 </div>
               ))
             )}
-          </nav>
+          </nav>:null}
         </div>
       </div>
     </>
