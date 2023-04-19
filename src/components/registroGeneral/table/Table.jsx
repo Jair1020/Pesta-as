@@ -1,6 +1,7 @@
 import React from "react";
 import S from "./table.module.css";
 import eye from "../../../assets/Img/eye.png";
+import moment from "moment/moment";
 export default function Table({ values, services, gainStylists, seeBill }) {
   const totalPrice = services.reduce((acc, e) => {
     acc = acc + e.price;
@@ -64,7 +65,7 @@ export default function Table({ values, services, gainStylists, seeBill }) {
           </tr>
         ) : null}
         {gainStylists.map((e, idx) => (
-          <tr>
+          <tr key={idx} >
             <td>{e.name_stylist}</td>
             <td>{"$" + new Intl.NumberFormat("de-DE").format(e.gain)}</td>
             <td colSpan={7}></td>
@@ -87,7 +88,7 @@ export default function Table({ values, services, gainStylists, seeBill }) {
 
         {services.map((e, idx) => (
           <tr key={idx}>
-            <td>{new Date(e.bill_date).toLocaleDateString() }</td>
+            <td>{moment(e.bill_date).format("YYYY-MM-DD")}</td>
             <td>{e.name_client}</td>
             <td>{e.name_service ? e.name_service : e.name_product}</td>
             <td>{e.name_stylist ? e.name_stylist : "-----"}</td>

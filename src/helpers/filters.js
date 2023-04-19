@@ -1,7 +1,7 @@
 export  const valUnitarios = ({ services, expenses }) => {
   let valUnitarios = {};
   let obj = {};
-  console.log (services)
+
   valUnitarios.efectivo = services.reduce((acc, e) => {
     if (!obj[e.id_bill]) {
       acc = acc + (e.catch ? e.catch : 0);

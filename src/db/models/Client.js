@@ -27,10 +27,10 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
         defaultValue: '',
       },
-      disabled: {
+      /* disabled: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-      }
+      } */
     },
     {
       timestamps: false,

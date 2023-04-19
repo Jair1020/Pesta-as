@@ -29,13 +29,10 @@ export default function RegistroGeneral() {
     ("GET_GENERAL_BILLS", dates);
     let expenses = await ipcRenderer.invoke("GET_GENERAL_EXPENSES", dates);
     let values = valUnitarios({ services: bills, expenses });
-    // console.log(values);
     setValues(values);
     let serviceFilters= filterServ ({filterServices, filterStylists,services:bills })
     setservices (serviceFilters)
     let gainSty= gainStylist ({serviceFilters})
-    console.log (serviceFilters)
-    console.log (gainSty)
     setGainStylists (gainSty)
 
   };

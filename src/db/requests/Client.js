@@ -25,7 +25,6 @@ const createClient = async (client) => {
 const getOneClient = async (id) => {
   try {
     const client = await Client.findByPk(id)
-    console.log (client)
     return client
 
   } catch (err) {
@@ -101,7 +100,7 @@ const searchName = async (name)=>{
         name_client: {
           [Op.like]:`%${name}%` 
         },
-        disabled: false 
+        /* disabled: false */ 
       }
     })
     return client

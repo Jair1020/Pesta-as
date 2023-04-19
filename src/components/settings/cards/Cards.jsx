@@ -163,7 +163,7 @@ export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
     setModalPercentages(true);
   };
   return seccion.map((e) => (
-    <>
+    <> 
     <div
       className={S.cont}
       key={e.id}
@@ -231,6 +231,7 @@ export default function Cards({ seccion, idxseccion, categories, setSeccion }) {
       </div>
     </div>
       {modalPercentages && <ModalPercentages
+        key={e.id}
         setModal={setModalPercentages}
         percentages={percentages}
         setPercentages={setPercentages}

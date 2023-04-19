@@ -17,7 +17,6 @@ export default function ModalClient({setModalClient}) {
   const onSearch = async () => {
     let clientFound = await ipcRenderer.invoke("GET_ONE_CLIENT", input)
     if (clientFound) {
-      console.log(clientFound)
       setClient(clientFound)
       setIds(s => ({ ...s, previous: clientFound.id }))
       Toast.fire({
@@ -36,8 +35,6 @@ export default function ModalClient({setModalClient}) {
   }
 
   const setMigrate = async () => {
-    console.log(ids)
-    console.log(client.id)
     let idMigrated = await ipcRenderer.invoke("UPDATE_IDCLIENT", ids)
     if (idMigrated === true) {
       Toast.fire({

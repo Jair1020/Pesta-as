@@ -205,7 +205,7 @@ const getBills = async (date) => {
     let stylist_category = await Stylist_Category.findAll({ raw: true })
     let billsData = JSON.parse(JSON.stringify(bills))
     let servicesdaily = [];
-    console.log (billsData)
+
     billsData.map((b) => {
       let dataBill = {
         bill_date: b.bill_date,
@@ -229,6 +229,7 @@ const getBills = async (date) => {
         servicesdaily.push({ ...dataBill })
       })
       dataBill = {
+        bill_date: b.bill_date,
         id_bill: b.id,
         name_client: b.client.name_client,
         status: b.status,
