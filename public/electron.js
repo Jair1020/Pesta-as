@@ -24,6 +24,7 @@ const { verifyPassword } = require('../src/db/requests/Password.js');
 const { getCategories } = require('../src/db/requests/Categories.js');
 const { createExpense, getExpenseDaily, getExpenses } = require('../src/db/requests/Expense.js');
 const { createBillChange, getBillChanges } = require('../src/db/requests/BillChange.js');
+const { sendMail } = require('../src/helpers/mail.js');
 
 
 
@@ -334,6 +335,15 @@ ipcMain.handle ('UPDATE_IDCLIENT', async (event, arg)=>{
   }catch (err){
     return err
   }
+})
+
+ipcMain.handle ('SEND_MAIL',  (event,arg)=>{
+ try{
+  let Mail =  sendMail (arg)
+  return Mail
+ }catch (err){
+  return err
+ }
 })
 
 //----------------------------------------------//

@@ -1,6 +1,8 @@
 import React from "react";
 import S from "./dailyBalance.module.css";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
+const ipcRenderer = window.ipcRenderer;
+
 
 export default function DailyBalance({
   valUnitarios,
@@ -8,17 +10,71 @@ export default function DailyBalance({
   stylist_gain,
   changes,
 }) {
+
+  async function downloadCSV(csv, filename) {
+    var csvFile;
+    var downloadLink;
+
+    // CSV file
+    // csvFile = new Blob([csv], {type: "text/csv;charset=utf-8,"});
+    const table = document.getElementById("tableReport").outerHTML
+    const fileData = [
+      `${'<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-mic' + 'rosoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta cha' + 'rset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:Exce' + 'lWorksheet><x:Name>Reporte</x:Name><x:WorksheetOptions><x:DisplayGridlines/>' + '</x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></' + 'xml><![endif]--></head><body>'}${table}</body></html>`];
+
+      const blobObject = new Blob(fileData);
+    // Download link
+    downloadLink = document.createElement("a");
+
+    // File name
+    downloadLink.download = filename;
+
+    // Create a link to the file
+    downloadLink.href = window.URL.createObjectURL(blobObject);
+    const mail=  await ipcRenderer.invoke ('SEND_MAIL', {nameBill:filename, img:`data:application/vnd.ms-excel;base64,${window.btoa(unescape(encodeURIComponent(fileData[0])))}` } )
+    // Hide download link
+    downloadLink.style.display = "none";
+
+    // Add the link to DOM
+    document.body.appendChild(downloadLink);
+
+    // Click download link
+    downloadLink.click();
+}
+
+  const csv = ()=>{
+    var csv = [];
+    var rows = document.querySelectorAll("table tr");
+    
+    for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll("td, th");
+        
+        for (var j = 0; j < cols.length; j++) 
+            row.push(cols[j].innerText);
+        
+        csv.push(row.join(","));
+      }
+
+      // Download CSV file
+      downloadCSV(csv.join("\n"), "reporte");
+  }
+
+
+
+
   return (
     <>
-      <ReactHTMLTableToExcel
+      {/* <ReactHTMLTableToExcel
         id="DescargarReporte"
         className={S.exportExcel}
         table="tableReport"
         filename={`Reporte-${new Date(Date.now()).toLocaleDateString()}`}
         sheet="Reporte"
         buttonText="Exportar a Excel"
-      />
-
+      /> */}
+      <button
+      id="DescargarReporte"
+      onClick={csv}
+      >CSV</button>
       <table id="tableReport" className={S.table}>
         <tbody>
           <tr>
