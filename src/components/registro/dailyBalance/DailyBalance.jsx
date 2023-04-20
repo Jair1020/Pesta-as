@@ -3,25 +3,28 @@ import S from "./dailyBalance.module.css";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 const ipcRenderer = window.ipcRenderer;
 
-
 export default function DailyBalance({
   valUnitarios,
   dailyServices,
   stylist_gain,
   changes,
 }) {
-
-  async function downloadCSV(csv, filename) {
-    var csvFile;
+  async function downloadCSV(filename) {
     var downloadLink;
 
-    // CSV file
-    // csvFile = new Blob([csv], {type: "text/csv;charset=utf-8,"});
-    const table = document.getElementById("tableReport").outerHTML
+    const table = document.getElementById("tableReport").outerHTML;
     const fileData = [
-      `${'<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-mic' + 'rosoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta cha' + 'rset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:Exce' + 'lWorksheet><x:Name>Reporte</x:Name><x:WorksheetOptions><x:DisplayGridlines/>' + '</x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></' + 'xml><![endif]--></head><body>'}${table}</body></html>`];
+      `${
+        '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-mic' +
+        'rosoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta cha' +
+        'rset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:Exce' +
+        "lWorksheet><x:Name>Reporte</x:Name><x:WorksheetOptions><x:DisplayGridlines/>" +
+        "</x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></" +
+        "xml><![endif]--></head><body>"
+      }${table}</body></html>`,
+    ];
 
-      const blobObject = new Blob(fileData);
+    const blobObject = new Blob(fileData);
     // Download link
     downloadLink = document.createElement("a");
 
@@ -30,7 +33,12 @@ export default function DailyBalance({
 
     // Create a link to the file
     downloadLink.href = window.URL.createObjectURL(blobObject);
-    const mail=  await ipcRenderer.invoke ('SEND_MAIL', {nameBill:filename, img:`data:application/vnd.ms-excel;base64,${window.btoa(unescape(encodeURIComponent(fileData[0])))}` } )
+    const mail = await ipcRenderer.invoke("SEND_MAIL", {
+      nameBill: filename,
+      img: `data:application/vnd.ms-excel;base64,${window.btoa(
+        unescape(encodeURIComponent(fileData[0]))
+      )}`,
+    });
     // Hide download link
     downloadLink.style.display = "none";
 
@@ -39,27 +47,8 @@ export default function DailyBalance({
 
     // Click download link
     downloadLink.click();
-}
-
-  const csv = ()=>{
-    var csv = [];
-    var rows = document.querySelectorAll("table tr");
-    
-    for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll("td, th");
-        
-        for (var j = 0; j < cols.length; j++) 
-            row.push(cols[j].innerText);
-        
-        csv.push(row.join(","));
-      }
-
-      // Download CSV file
-      downloadCSV(csv.join("\n"), "reporte");
+    downloadLink.remove ()
   }
-
-
-
 
   return (
     <>
@@ -71,10 +60,9 @@ export default function DailyBalance({
         sheet="Reporte"
         buttonText="Exportar a Excel"
       /> */}
-      <button
-      id="DescargarReporte"
-      onClick={csv}
-      >CSV</button>
+      <button id="DescargarReporte" onClick={()=>downloadCSV('reporte')}>
+        CSV
+      </button>
       <table id="tableReport" className={S.table}>
         <tbody>
           <tr>
@@ -166,14 +154,18 @@ export default function DailyBalance({
           <tr>
             <td colSpan="8"></td>
           </tr>
-          {changes.length?<tr>
-            <th colSpan="3"> Cambios a facturas</th>
-          </tr>:null}
-         {changes.length? <tr>
-            <th>id factura</th>
-            <th>Nombre</th>
-            <th>Razón</th>
-          </tr>:null}
+          {changes.length ? (
+            <tr>
+              <th colSpan="3"> Cambios a facturas</th>
+            </tr>
+          ) : null}
+          {changes.length ? (
+            <tr>
+              <th>id factura</th>
+              <th>Nombre</th>
+              <th>Razón</th>
+            </tr>
+          ) : null}
           {changes.map((e) => (
             <tr>
               <td>{e.billId}</td>
@@ -194,7 +186,6 @@ export default function DailyBalance({
               <td>{"$" + new Intl.NumberFormat("de-DE").format(e.gain)}</td>
             </tr>
           ))}
-          
         </tbody>
       </table>
     </>

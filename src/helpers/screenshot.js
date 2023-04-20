@@ -10,7 +10,9 @@ export const screenshot = (nameBill) => {
     enlace.href = canvas.toDataURL();
     enlace.click();
     enlace.remove ()
-    const mail= await ipcRenderer.invoke ('SEND_MAIL', {nameBill:nameBill, img } )
+    // const mail= await ipcRenderer.invoke ('SEND_MAIL', {nameBill:nameBill, img } )
+
+    
     /* var width = doc.internal.pageSize.getWidth();
     var height = doc.internal.pageSize.getHeight();
     doc.addImage(img, 'PNG', 0, 0, width, height);
