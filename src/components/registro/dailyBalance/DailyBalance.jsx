@@ -1,7 +1,7 @@
 import React from "react";
 import S from "./dailyBalance.module.css";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-const ipcRenderer = window.ipcRenderer;
+// const ipcRenderer = window.ipcRenderer;
 
 export default function DailyBalance({
   valUnitarios,
@@ -9,60 +9,60 @@ export default function DailyBalance({
   stylist_gain,
   changes,
 }) {
-  async function downloadCSV(filename) {
-    var downloadLink;
+  // async function downloadCSV(filename) {
+  //   var downloadLink;
 
-    const table = document.getElementById("tableReport").outerHTML;
-    const fileData = [
-      `${
-        '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-mic' +
-        'rosoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta cha' +
-        'rset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:Exce' +
-        "lWorksheet><x:Name>Reporte</x:Name><x:WorksheetOptions><x:DisplayGridlines/>" +
-        "</x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></" +
-        "xml><![endif]--></head><body>"
-      }${table}</body></html>`,
-    ];
+  //   const table = document.getElementById("tableReport").outerHTML;
+  //   const fileData = [
+  //     `${
+  //       '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-mic' +
+  //       'rosoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta cha' +
+  //       'rset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:Exce' +
+  //       "lWorksheet><x:Name>Reporte</x:Name><x:WorksheetOptions><x:DisplayGridlines/>" +
+  //       "</x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></" +
+  //       "xml><![endif]--></head><body>"
+  //     }${table}</body></html>`,
+  //   ];
 
-    const blobObject = new Blob(fileData);
-    // Download link
-    downloadLink = document.createElement("a");
+  //   const blobObject = new Blob(fileData);
+  //   // Download link
+  //   downloadLink = document.createElement("a");
 
-    // File name
-    downloadLink.download = filename;
+  //   // File name
+  //   downloadLink.download = filename;
 
-    // Create a link to the file
-    downloadLink.href = window.URL.createObjectURL(blobObject);
-    const mail = await ipcRenderer.invoke("SEND_MAIL", {
-      nameBill: filename,
-      img: `data:application/vnd.ms-excel;base64,${window.btoa(
-        unescape(encodeURIComponent(fileData[0]))
-      )}`,
-    });
-    // Hide download link
-    downloadLink.style.display = "none";
+  //   // Create a link to the file
+  //   downloadLink.href = window.URL.createObjectURL(blobObject);
+  //   const mail = await ipcRenderer.invoke("SEND_MAIL", {
+  //     nameBill: filename,
+  //     img: `data:application/vnd.ms-excel;base64,${window.btoa(
+  //       unescape(encodeURIComponent(fileData[0]))
+  //     )}`,
+  //   });
+  //   // Hide download link
+  //   downloadLink.style.display = "none";
 
-    // Add the link to DOM
-    document.body.appendChild(downloadLink);
+  //   // Add the link to DOM
+  //   document.body.appendChild(downloadLink);
 
-    // Click download link
-    downloadLink.click();
-    downloadLink.remove ()
-  }
+  //   // Click download link
+  //   downloadLink.click();
+  //   downloadLink.remove ()
+  // }
 
   return (
     <>
-      {/* <ReactHTMLTableToExcel
+      <ReactHTMLTableToExcel
         id="DescargarReporte"
         className={S.exportExcel}
         table="tableReport"
         filename={`Reporte-${new Date(Date.now()).toLocaleDateString()}`}
         sheet="Reporte"
         buttonText="Exportar a Excel"
-      /> */}
-      <button id="DescargarReporte" onClick={()=>downloadCSV('reporte')}>
+      />
+      {/* <button id="DescargarReporte" onClick={()=>downloadCSV('reporte')}>
         CSV
-      </button>
+      </button> */}
       <table id="tableReport" className={S.table}>
         <tbody>
           <tr>

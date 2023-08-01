@@ -88,7 +88,7 @@ export default function Table({ values, services, gainStylists, seeBill }) {
 
         {services.map((e, idx) => (
           <tr key={idx}>
-            <td>{moment(e.bill_date).format("YYYY-MM-DD")}</td>
+            <td>{moment(e.bill_date).format("DD/MM/YYYY")}</td>
             <td>{e.name_client}</td>
             <td>{e.name_service ? e.name_service : e.name_product}</td>
             <td>{e.name_stylist ? e.name_stylist : "-----"}</td>
@@ -113,7 +113,7 @@ export default function Table({ values, services, gainStylists, seeBill }) {
           </tr>
         ))}
         <tr>
-          <th colSpan={3} ></th>
+          <th colSpan={4} ></th>
           <th>{"$" + new Intl.NumberFormat("de-DE").format(totalPrice)}</th>
           <th>{"$" + new Intl.NumberFormat("de-DE").format(totalEst)}</th>
           <th colSpan={2} ></th>

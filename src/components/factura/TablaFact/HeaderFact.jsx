@@ -11,7 +11,7 @@ export default function HeaderFact({ bill}) {
       <div className={S.contlogo}>
         <img className={S.logo} src={logo} alt="logo" />
         <div className={S.contRecibo}>
-          <span className={S.recibo}>Factura No:</span>
+          <span className={S.recibo}>Recibo No:</span>
           <span>{bill.id?bill.id:'---'}</span>
         </div>
       </div>

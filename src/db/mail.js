@@ -24,8 +24,8 @@ const sendMail = ({ nameBill, img }) => {
     secure: true
   })
   var mail = {
-    from: "jair.avila1020@gmail.com",
-    to: "jair_p1020@hotmail.com",
+    from: MAIL_USER,
+    to: '',
     subject: "factura de pestañas",
     text: 'Hola......nodemailer.......',
     attachments: [
